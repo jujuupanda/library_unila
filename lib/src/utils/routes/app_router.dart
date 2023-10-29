@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:library_unila/src/data/models/book_models.dart';
+import 'package:library_unila/src/data/models/borrow_models.dart';
 import 'package:library_unila/src/data/models/user_models.dart';
 import 'package:library_unila/src/pages/barcode_ktm/barcode_ktm.dart';
 import 'package:library_unila/src/pages/bottom_navigation/bottom_navigation.dart';
@@ -65,7 +66,7 @@ class AppRouter {
                       path: 'barcodeKTM',
                       name: Routes.barcodeKTM,
                       builder: (context, state) {
-                        return BarcodeKTM(key: state.pageKey);
+                        return BarcodeKTM(key: state.pageKey, userModels: state.extra as List<UserModels>,);
                       },
                     ),
                     GoRoute(
@@ -79,7 +80,7 @@ class AppRouter {
                             path: 'detailStatus',
                             name: Routes.detailStatus,
                             builder: (context, state) {
-                              return DetailStatusPage();
+                              return DetailStatusPage(status: state.extra as BorrowModels,);
                             },
                           )
                         ]),
@@ -94,7 +95,7 @@ class AppRouter {
                             path: 'detailHistory',
                             name: Routes.detailHistory,
                             builder: (context, state) {
-                              return DetailHistoryPage();
+                              return DetailHistoryPage(history: state.extra as BorrowModels,);
                             },
                           )
                         ]),

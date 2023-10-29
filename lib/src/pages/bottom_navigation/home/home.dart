@@ -8,6 +8,7 @@ import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/blocs/borrow/borrow_bloc.dart';
 import '../../../data/blocs/user/user_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,27 +19,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late String tokenUser;
+  late UserBloc userBloc;
+  late BorrowBloc borrowBloc;
   NumberFormat currencyFormatter = NumberFormat.currency(
     locale: 'id',
     symbol: 'Rp ',
-    decimalDigits: 2,
+    decimalDigits: 0,
   );
 
   Future<String?> _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
     if (token != null && token != "") {
-      context.read<UserBloc>().add(GetUserEvent(token));
-      return token;
+      // await _getUser(token);
+      // await _getDataBorrow(token);
+      return tokenUser = token;
     } else {
       print("home page token not found");
     }
     return null;
   }
 
+  _getUser(String token) {
+    userBloc = context.read<UserBloc>();
+    userBloc.add(GetUserEvent(token));
+  }
+
+  _getDataBorrow(String token) {
+    borrowBloc = context.read<BorrowBloc>();
+    borrowBloc.add(GetBorrowEvent(token));
+  }
+
   @override
   void didChangeDependencies() {
-    _getToken();
+    _getToken().then(
+          (value) {
+        if (value != null) {
+          _getUser(value);
+          _getDataBorrow(value);
+        }
+      },
+    );
+    // _getToken().then((value) => _getDataBorrow(value!));
     super.didChangeDependencies();
   }
 
@@ -47,7 +70,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
-          print(state);
           if (state is UserLoadingState) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -60,23 +82,56 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
-                        StatusMenuHome(
-                            colorPrimary: Colors.green,
-                            colorSecondary: Colors.greenAccent,
-                            nameStatusMenuHome: "Peminjaman Yang Sedang Dilakukan:",
-                            valueStatusMenuHome: "1 Buku"),
+                        BlocBuilder<BorrowBloc, BorrowState>(
+                          builder: (context, state) {
+                            if (state is GetBorrowSuccessState) {
+                              return StatusMenuHome(
+                                  colorPrimary: Colors.green,
+                                  colorSecondary: Colors.greenAccent,
+                                  nameStatusMenuHome:
+                                  "Peminjaman Yang Sedang Dilakukan:",
+                                  valueStatusMenuHome:
+                                  "${state.listBorrow.length} Buku");
+                            }
+                            return StatusMenuHome(
+                                colorPrimary: Colors.green,
+                                colorSecondary: Colors.greenAccent,
+                                nameStatusMenuHome:
+                                "Peminjaman Yang Sedang Dilakukan:",
+                                valueStatusMenuHome:
+                                "0 Buku");
+                          },
+                        ),
                         const SizedBox(height: 10),
-                        StatusMenuHome(
-                            colorPrimary: Colors.yellow,
-                            colorSecondary: Colors.yellowAccent,
-                            nameStatusMenuHome: "Peminjaman Yang Melewati Batas Waktu:",
-                            valueStatusMenuHome: "1 Buku"),
+                        BlocBuilder<BorrowBloc, BorrowState>(
+                          builder: (context, state) {
+                            if(state is GetBorrowSuccessState){
+                              return StatusMenuHome(
+                                  colorPrimary: Colors.yellow,
+                                  colorSecondary: Colors.yellowAccent,
+                                  nameStatusMenuHome:
+                                  "Peminjaman Yang Melewati Batas Waktu:",
+                                  valueStatusMenuHome:
+                                  "${state.listBorrow.where((element) => DateTime.now().isAfter(DateTime.parse(element.dateBorrow!).add(const Duration(days: 7)))).length} Buku");
+
+                            }
+                            return StatusMenuHome(
+                                colorPrimary: Colors.yellow,
+                                colorSecondary: Colors.yellowAccent,
+                                nameStatusMenuHome:
+                                "Peminjaman Yang Melewati Batas Waktu:",
+                                valueStatusMenuHome:
+                                "0 Buku");
+                          },
+                        ),
                         const SizedBox(height: 10),
                         StatusMenuHome(
                             colorPrimary: Colors.red,
                             colorSecondary: Colors.redAccent,
                             nameStatusMenuHome: "Denda:",
-                            valueStatusMenuHome: "${currencyFormatter.format(state.userModels.first.fined) ?? 0}"),
+                            valueStatusMenuHome:
+                            "${currencyFormatter.format(state.userModels.first
+                                .fined) ?? 0}"),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +140,8 @@ class _HomePageState extends State<HomePage> {
                                 menuImage: imageBarcode,
                                 menuName: "Barcode KTM",
                                 function: () {
-                                  context.pushNamed(Routes.barcodeKTM);
+                                  context.pushNamed(Routes.barcodeKTM,
+                                      extra: state.userModels);
                                 }),
                             MenuHome(
                                 menuImage: imageStatus,

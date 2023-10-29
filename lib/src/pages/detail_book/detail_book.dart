@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:library_unila/src/data/models/detailed_book_model.dart';
 import 'package:library_unila/src/pages/utils/book_information.dart';
 import 'package:library_unila/src/pages/utils/header_page.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
@@ -16,28 +15,6 @@ class DetailBookPage extends StatefulWidget {
 }
 
 class _DetailBookPageState extends State<DetailBookPage> {
-  List<DetailedBookModel> listBookInformation = [
-    DetailedBookModel("3622101101001", "392 gce kc 1", "Sedang Diperbaiki",
-        "Buku", "Perpustakaan"),
-    DetailedBookModel(
-        "3622101101002", "392 gce kc 2", "Tersedia", "Buku", "Perpustakaan"),
-    DetailedBookModel("3622101101003", "392 gce kc 3", "Tidak Untuk Dipinjam",
-        "Buku", "Perpustakaan"),
-    DetailedBookModel(
-        "3622101101004", "392 gce kc 4", "Tersedia", "Buku", "Perpustakaan"),
-  ];
-
-  listDataRow() {
-    listBookInformation.map((e) {
-      return [
-        DataCell(Text(e.noItem!)),
-        DataCell(Text(e.noCall!)),
-        DataCell(Text(e.status!)),
-        DataCell(Text(e.type!)),
-        DataCell(Text(e.location!))
-      ];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
