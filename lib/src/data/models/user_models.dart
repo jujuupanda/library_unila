@@ -1,13 +1,15 @@
 class UserModels {
   UserModels({
-      this.id, 
-      this.npm, 
-      this.name, 
-      this.email, 
-      this.address, 
-      this.password, 
-      this.phone, 
-      this.createdAt,});
+    this.id,
+    this.npm,
+    this.name,
+    this.email,
+    this.address,
+    this.password,
+    this.phone,
+    this.fined,
+    this.createdAt,
+  });
 
   UserModels.fromJson(dynamic json) {
     id = json['id'];
@@ -17,8 +19,10 @@ class UserModels {
     address = json['address'];
     password = json['password'];
     phone = json['phone'];
+    fined = json['fined'];
     createdAt = json['createdAt'];
   }
+
   int? id;
   String? npm;
   String? name;
@@ -26,6 +30,7 @@ class UserModels {
   String? address;
   String? password;
   String? phone;
+  int? fined;
   String? createdAt;
 
   Map<String, dynamic> toJson() {
@@ -37,8 +42,8 @@ class UserModels {
     map['address'] = address;
     map['password'] = password;
     map['phone'] = phone;
+    map['fined'] = fined;
     map['createdAt'] = createdAt;
     return map;
   }
-
 }

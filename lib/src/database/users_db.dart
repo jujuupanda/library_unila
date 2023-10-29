@@ -7,6 +7,7 @@ final userDb = [
     "address" : "Jl. Permaisyur Kota Lapet",
     "password" : "1915061008",
     "phone" : "0858",
+    "fined" : 250000,
     "createdAt" : "2023-10-26 00:00:00.000"
   },
   {
@@ -17,6 +18,7 @@ final userDb = [
     "address" : "Jl. Berang-Berang",
     "password" : "1915061001",
     "phone" : "0821",
+    "fined" : 0,
     "createdAt" : "2023-10-26 00:00:00.000"
   }
 ];

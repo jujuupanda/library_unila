@@ -1,7 +1,8 @@
 class BorrowModels {
   BorrowModels({
-      this.title, 
-      this.noItem, 
+      this.npm,
+      this.title,
+      this.noItem,
       this.noCall, 
       this.author, 
       this.edition, 
@@ -10,6 +11,7 @@ class BorrowModels {
       this.dateReturn,});
 
   BorrowModels.fromJson(dynamic json) {
+    npm = json['npm'];
     title = json['title'];
     noItem = json['noItem'];
     noCall = json['noCall'];
@@ -19,6 +21,7 @@ class BorrowModels {
     dateBorrow = json['dateBorrow'];
     dateReturn = json['dateReturn'];
   }
+  String? npm;
   String? title;
   String? noItem;
   String? noCall;
@@ -30,6 +33,7 @@ class BorrowModels {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['npm'] = npm;
     map['title'] = title;
     map['noItem'] = noItem;
     map['noCall'] = noCall;

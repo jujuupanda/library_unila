@@ -23,14 +23,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     await Future.delayed(const Duration(seconds: 1), () async {
       try {
-        print("user bloc start success");
         final user = await repository.getUserClass.getUser(event.token);
         emit(GetUserSuccessState(user));
-        print("user bloc end success");
       } catch (e) {
-        print("user bloc start error");
         emit(GetUserErrorState());
-        print("user bloc end success");
       }
     });
   }

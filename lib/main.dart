@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_unila/app.dart';
 import 'package:library_unila/src/data/blocs/auth/auth_bloc.dart';
+import 'package:library_unila/src/data/blocs/borrow/borrow_bloc.dart';
+import 'package:library_unila/src/data/blocs/history/history_bloc.dart';
 import 'package:library_unila/src/data/blocs/opac/opac_bloc.dart';
 import 'package:library_unila/src/data/blocs/user/user_bloc.dart';
 import 'package:library_unila/src/data/repositories/auth_repository/auth_repository.dart';
+import 'package:library_unila/src/data/repositories/borrow_reositories/borrow_repository.dart';
+import 'package:library_unila/src/data/repositories/history_repositories/history_repository.dart';
 import 'package:library_unila/src/data/repositories/opac_repositories/opac_repository.dart';
 import 'package:library_unila/src/data/repositories/user_repository/user_repository.dart';
 
@@ -29,6 +33,12 @@ class MyApp extends StatelessWidget {
           RepositoryProvider(
             create: (context) => OpacRepository(),
           ),
+          RepositoryProvider(
+            create: (context) => BorrowRepository(),
+          ),
+          RepositoryProvider(
+            create: (context) => HistoryRepository(),
+          ),
         ],
         child: MultiBlocProvider(providers: [
           BlocProvider(
@@ -39,6 +49,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => OpacBloc(repository: OpacRepository()),
+          ),
+          BlocProvider(
+            create: (context) => BorrowBloc(repository: BorrowRepository()),
+          ),
+          BlocProvider(
+            create: (context) => HistoryBloc(repository: HistoryRepository()),
           ),
         ], child: const Apps()));
   }

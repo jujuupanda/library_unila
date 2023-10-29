@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:library_unila/src/pages/utils/book_information.dart';
 import 'package:library_unila/src/pages/utils/header_page.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 
+import '../../data/models/borrow_models.dart';
+
 class DetailHistoryPage extends StatefulWidget {
-  const DetailHistoryPage({Key? key}) : super(key: key);
+  BorrowModels history;
+
+  DetailHistoryPage({Key? key, required this.history}) : super(key: key);
 
   @override
   State<DetailHistoryPage> createState() => _DetailHistoryPageState();
@@ -25,14 +30,34 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               children: [
-                BookInformation(informationName: "Judul Buku", information: ""),
-                BookInformation(informationName: "Nomor Item", information: ""),
-                BookInformation(informationName: "Nomor Panggil", information: ""),
-                BookInformation(informationName: "Author", information: ""),
-                BookInformation(informationName: "Edisi", information: ""),
-                BookInformation(informationName: "ISBN/ISSN", information: ""),
-                BookInformation(informationName: "Tanggal Pinjam", information: ""),
-                BookInformation(informationName: "Tanggal Kembali", information: ""),
+                BookInformation(
+                    informationName: "Judul Buku",
+                    information: widget.history.title ?? ""),
+                BookInformation(
+                    informationName: "Nomor Item",
+                    information: widget.history.noItem ?? ""),
+                BookInformation(
+                    informationName: "Nomor Panggil",
+                    information: widget.history.noCall ?? ""),
+                BookInformation(
+                    informationName: "Penulis",
+                    information: widget.history.author ?? ""),
+                BookInformation(
+                    informationName: "Edisi",
+                    information: widget.history.edition ?? ""),
+                BookInformation(
+                    informationName: "ISBN/ISSN",
+                    information: widget.history.serialNumber ?? ""),
+                BookInformation(
+                    informationName: "Tanggal Pinjam",
+                    information: DateFormat("dd MMMM yyyy").format(
+                            DateTime.parse(widget.history.dateBorrow!)) ??
+                        ""),
+                BookInformation(
+                    informationName: "Tanggal Kembali",
+                    information: DateFormat("dd MMMM yyyy").format(
+                            DateTime.parse(widget.history.dateReturn!)) ??
+                        ""),
               ],
             ),
           ),
