@@ -10,3 +10,4 @@ const imageBookCover = "assets/images/cover_book.png";
 const imagePerpus = "assets/images/upt_perpus.png";
 const imageOpacUnila = "assets/images/opac_unila.png";
 const imageBackgroundOpac = "assets/images/background_opac.jpg";
+const imageHelp = "assets/images/help.png";

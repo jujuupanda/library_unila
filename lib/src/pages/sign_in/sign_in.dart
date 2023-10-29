@@ -5,7 +5,6 @@ import 'package:library_unila/src/data/blocs/auth/auth_bloc.dart';
 import 'package:library_unila/src/pages/sign_in/sign_in_header.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -104,9 +103,6 @@ class _SignInPageState extends State<SignInPage> {
                               fontSize: 16),
                         ),
                         TextFormField(
-                          scrollPadding: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).viewInsets.bottom),
                           controller: passwordController,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textInputAction: TextInputAction.done,

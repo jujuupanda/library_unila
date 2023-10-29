@@ -37,6 +37,7 @@ dependencies:
   http: ^0.13.5
   email_validator: ^2.1.17
   image_picker: ^0.8.6+3
+  remove_emoji_input_formatter: ^0.0.1+1
 
 
   # The following adds the Cupertino Icons font to your application.

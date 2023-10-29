@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:library_unila/src/data/models/book_models.dart';
+import 'package:library_unila/src/data/models/user_models.dart';
 import 'package:library_unila/src/pages/barcode_ktm/barcode_ktm.dart';
 import 'package:library_unila/src/pages/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +168,6 @@ class AppRouter {
       /// for consume, use context.push(context.namedLocation('somePlace'))
       /// for remove the navbar use rootNavigator as parentNavigator (GoRoutes fields)
 
-
       GoRoute(
         path: '/changePassword',
         name: Routes.changePassword,
@@ -199,12 +199,15 @@ class AppRouter {
         },
       ),
       GoRoute(
-          path: '/edit',
-          name: Routes.edit,
-          parentNavigatorKey: _rootNavigatorKeys,
-          builder: (context, state) {
-            return EditProfilePage();
-          },),
+        path: '/edit',
+        name: Routes.edit,
+        parentNavigatorKey: _rootNavigatorKeys,
+        builder: (context, state) {
+          return EditProfilePage(
+            userModels: state.extra as List<UserModels>,
+          );
+        },
+      ),
     ],
   );
 }

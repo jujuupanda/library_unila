@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:library_unila/src/pages/bottom_navigation/home/home_header.dart';
+import 'package:library_unila/src/pages/utils/home_menu.dart';
+import 'package:library_unila/src/pages/utils/status_menu_home.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../data/blocs/user/user_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,231 +18,119 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  NumberFormat currencyFormatter = NumberFormat.currency(
+    locale: 'id',
+    symbol: 'Rp ',
+    decimalDigits: 2,
+  );
+
+  Future<String?> _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString("token");
+    if (token != null && token != "") {
+      context.read<UserBloc>().add(GetUserEvent(token));
+      return token;
+    } else {
+      print("home page token not found");
+    }
+    return null;
+  }
+
+  @override
+  void didChangeDependencies() {
+    _getToken();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          const HeaderHome(),
-          const SizedBox(height: 30),
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: colorBlueHome,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
-                                  context.goNamed(Routes.barcodeKTM);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Image.asset(
-                                    imageBarcode,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text("Barcode KTM", style: poppinsNormal),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: colorBlueHome,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+          print(state);
+          if (state is UserLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is GetUserSuccessState) {
+            return Column(
+              children: [
+                const HeaderHome(),
+                const SizedBox(height: 20),
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        StatusMenuHome(
+                            colorPrimary: Colors.green,
+                            colorSecondary: Colors.greenAccent,
+                            nameStatusMenuHome: "Peminjaman Yang Sedang Dilakukan:",
+                            valueStatusMenuHome: "1 Buku"),
+                        const SizedBox(height: 10),
+                        StatusMenuHome(
+                            colorPrimary: Colors.yellow,
+                            colorSecondary: Colors.yellowAccent,
+                            nameStatusMenuHome: "Peminjaman Yang Melewati Batas Waktu:",
+                            valueStatusMenuHome: "1 Buku"),
+                        const SizedBox(height: 10),
+                        StatusMenuHome(
+                            colorPrimary: Colors.red,
+                            colorSecondary: Colors.redAccent,
+                            nameStatusMenuHome: "Denda:",
+                            valueStatusMenuHome: "${currencyFormatter.format(state.userModels.first.fined) ?? 0}"),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MenuHome(
+                                menuImage: imageBarcode,
+                                menuName: "Barcode KTM",
+                                function: () {
+                                  context.pushNamed(Routes.barcodeKTM);
+                                }),
+                            MenuHome(
+                                menuImage: imageStatus,
+                                menuName: "Status Pinjam",
+                                function: () {
                                   context.pushNamed(Routes.status);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Image.asset(
-                                    imageStatus,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text("Status Pinjam", style: poppinsNormal),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: colorBlueHome,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
+                                }),
+                            MenuHome(
+                                menuImage: imageHistory,
+                                menuName: "History Pinjam",
+                                function: () {
                                   context.pushNamed(Routes.history);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Image.asset(
-                                    imageHistory,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            "History Pinjam",
-                            style: poppinsNormal,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: colorBlueHome,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
-                                  context.pushNamed(Routes.edit);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Image.asset(
-                                    imageChecklist,
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text("Lengkapi Akun", style: poppinsNormal),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: colorBlueHome,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 3,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(100),
-                                onTap: () {
+                                })
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MenuHome(
+                                menuImage: imageChecklist,
+                                menuName: "Lengkapi Akun",
+                                function: () {
+                                  context.pushNamed(Routes.edit,
+                                      extra: state.userModels);
+                                }),
+                            MenuHome(
+                                menuImage: imageHelp,
+                                menuName: "Bantuan",
+                                function: () {
                                   context.pushNamed(Routes.help);
-                                },
-                                child: const Padding(
-                                    padding: EdgeInsets.all(20),
-                                    child: Icon(
-                                      Icons.help_outline_rounded,
-                                      size: 50,
-                                    )),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text("Bantuan", style: poppinsNormal),
-                        ],
-                      ),
-                      const SizedBox(height: 90, width: 90),
-                    ],
-                  ),
-                  const SizedBox(height: 100),
-                ],
-              )),
-        ],
+                                }),
+                            const SizedBox(height: 90, width: 90),
+                          ],
+                        ),
+                      ],
+                    )),
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
