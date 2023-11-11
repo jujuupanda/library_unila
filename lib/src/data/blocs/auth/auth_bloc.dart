@@ -23,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoadingState());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
-    if (token == null) {
+    if (token == null || token.isEmpty) {
       emit(UnAuthenticated());
     } else {
       emit(IsAuthenticated());
@@ -42,16 +42,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future _OnSignInEvent(OnSignInEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
-    await Future.delayed(const Duration(seconds: 1), () {
-      repository.signInClass.signIn(event.npm, event.password);
-    }).whenComplete(() {
-      if (repository.signInClass.errorMessageSignIn == "") {
-        _setToken("token", repository.signInClass.token);
-        emit(SignInSuccessState());
-      } else {
-        emit(SignInErrorState(repository.signInClass.errorMessageSignIn));
-      }
-    });
+    var token = await repository.signInClass.signIn(event.npm, event.password);
+    print(token);
+    if (repository.signInClass.errorMessageSignIn == "" && repository.signInClass.token != "") {
+      _setToken("token", repository.signInClass.token);
+      emit(SignInSuccessState());
+    } else {
+      emit(SignInErrorState(repository.signInClass.errorMessageSignIn));
+    }
   }
 
   Future _OnSignOutEvent(OnSignOutEvent event, Emitter<AuthState> emit) async {

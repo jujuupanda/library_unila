@@ -26,9 +26,8 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   signInButton() {
-    context
-        .read<AuthBloc>()
-        .add(OnSignInEvent(npmController.text, passwordController.text));
+    context.read<AuthBloc>().add(OnSignInEvent(
+        npmController.text.toString(), passwordController.text.toString()));
   }
 
   @override
@@ -152,7 +151,7 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         const SizedBox(height: 32),
                         Container(
-                          width: double.infinity,
+                          width: MediaQuery.of(context).size.width,
                           height: 40,
                           decoration: BoxDecoration(
                             color: Colors.blue,

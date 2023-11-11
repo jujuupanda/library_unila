@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:library_unila/src/pages/utils/search.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
+import 'package:library_unila/src/utils/routes/app_router.dart';
 
 import '../../../data/blocs/opac/opac_bloc.dart';
 
@@ -23,7 +24,7 @@ class _OpacPageState extends State<OpacPage> {
         children: [
           Container(
             height: 120,
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(color: colorPrimary),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -82,12 +83,12 @@ class _OpacPageState extends State<OpacPage> {
                 Image.asset(
                   imageBackgroundOpac,
                   fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                 ),
                 Container(
-                  height: double.infinity,
-                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
                   color: Colors.black.withOpacity(0.4),
                 ),
                 Padding(
@@ -101,16 +102,21 @@ class _OpacPageState extends State<OpacPage> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "OPAC Unila",
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          context.goNamed(Routes.signIn);
+                        },
+                        child: const Text(
+                          "OPAC Unila",
+                          style: TextStyle(
+                              fontSize: 40,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                        ),
                       ),
-                      Text(
+                      const Text(
                         "Layanan Online Public Access Catalog Universitas Lampung",
                         textAlign: TextAlign.center,
                         style: TextStyle(

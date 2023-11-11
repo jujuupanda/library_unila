@@ -23,7 +23,7 @@ class _StatusMenuHomeState extends State<StatusMenuHome> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       height: 70,
       decoration: BoxDecoration(
         color: Colors.white,

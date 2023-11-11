@@ -147,7 +147,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           )),
                       const SizedBox(height: 30),
                       Container(
-                        width: double.infinity,
+                        width: MediaQuery.of(context).size.width,
                         height: 40,
                         decoration: BoxDecoration(
                           color: Colors.blue,

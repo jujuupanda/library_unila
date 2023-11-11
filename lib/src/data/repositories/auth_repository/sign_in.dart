@@ -6,12 +6,27 @@ class AuthSignIn {
 
   signIn(String npm, String password) async {
     errorMessageSignIn = "";
-    if (npm == "1915061008" && password == "1915061008") {
-      return token = "1915061008";
-    } else if (npm == "1915061001" && password == "1915061001") {
-      return token = "1915061001";
+    token = "";
+    String url = 'http://172.16.1.47:4000/auth/login';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {'npm': npm, 'password': password},
+    );
+
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      return token = result['token'];
     } else {
-      return errorMessageSignIn = "NPM atau Password salah!";
+      final resultError = jsonDecode(response.body);
+      switch (resultError['message']){
+        case "NPM not found":
+          resultError['message'] = "NPM tidak ditemukan!";
+          break;
+        case "Invalid password":
+          resultError['message'] = "Password salah!";
+          break;
+      }
+      return errorMessageSignIn = resultError['message'];
     }
   }
 }

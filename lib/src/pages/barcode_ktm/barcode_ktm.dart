@@ -70,7 +70,7 @@ class _BarcodeKTMState extends State<BarcodeKTM> {
                 const SizedBox(height: 24),
                 Container(
                   height: 120,
-                  width: double.infinity,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(width: 1, color: Colors.black),

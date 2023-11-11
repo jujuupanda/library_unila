@@ -103,7 +103,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       ),
                       const SizedBox(height: 30),
                       Container(
-                        width: double.infinity,
+                        width: MediaQuery.of(context).size.width,
                         height: 40,
                         decoration: BoxDecoration(
                           color: Colors.blue,

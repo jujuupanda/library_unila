@@ -11,7 +11,7 @@ class HeaderHome extends StatelessWidget {
       children: [
         Container(
           height: 120,
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(color: colorPrimary),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
