@@ -6,13 +6,13 @@ import 'package:library_unila/src/pages/utils/header_page.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 import 'package:remove_emoji_input_formatter/remove_emoji_input_formatter.dart';
 
-import '../../data/models/user_models.dart';
+import '../../data/models/user_model.dart';
 import '../../utils/constants/constant.dart';
 
 class EditProfilePage extends StatefulWidget {
-  List<UserModels> userModels;
+  UserModel userModel;
 
-  EditProfilePage({Key? key, required this.userModels}) : super(key: key);
+  EditProfilePage({Key? key, required this.userModel}) : super(key: key);
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -24,15 +24,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController =
-        TextEditingController(text: widget.userModels.first.name ?? "");
+        TextEditingController(text: widget.userModel.fName ?? "");
     TextEditingController npmController =
-        TextEditingController(text: widget.userModels.first.npm ?? "");
+        TextEditingController(text: widget.userModel.id ?? "");
     TextEditingController emailController =
-        TextEditingController(text: widget.userModels.first.email ?? "");
+        TextEditingController(text: widget.userModel.eMail ?? "");
     TextEditingController phoneController =
-        TextEditingController(text: widget.userModels.first.phone ?? "");
+        TextEditingController(text: widget.userModel.phone ?? "");
     TextEditingController addressController =
-        TextEditingController(text: widget.userModels.first.address ?? "");
+        TextEditingController(text: widget.userModel.addr ?? "");
     TextEditingController pw = TextEditingController();
     return Scaffold(
       body: Column(

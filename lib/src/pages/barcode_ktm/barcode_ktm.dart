@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 
-import '../../data/models/user_models.dart';
+import '../../data/models/user_model.dart';
 import '../utils/header_page.dart';
 
 class BarcodeKTM extends StatefulWidget {
-  List<UserModels> userModels;
+  UserModel userModel;
 
-  BarcodeKTM({Key? key, required this.userModels}) : super(key: key);
+  BarcodeKTM({Key? key, required this.userModel}) : super(key: key);
 
   @override
   State<BarcodeKTM> createState() => _BarcodeKTMState();
@@ -44,7 +44,7 @@ class _BarcodeKTMState extends State<BarcodeKTM> {
                     const Text("Nama:", style: poppinsSemiBold),
                     SizedBox(
                       width: 200,
-                      child: Text(widget.userModels.first.name ?? "",
+                      child: Text(widget.userModel.fName ?? "",
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.fade,
                           maxLines: 1,
@@ -59,7 +59,7 @@ class _BarcodeKTMState extends State<BarcodeKTM> {
                     const Text("NPM:", style: poppinsSemiBold),
                     SizedBox(
                       width: 200,
-                      child: Text(widget.userModels.first.npm ?? "",
+                      child: Text(widget.userModel.id ?? "",
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.fade,
                           maxLines: 1,
@@ -88,7 +88,7 @@ class _BarcodeKTMState extends State<BarcodeKTM> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: BarcodeWidget(
-                      data: widget.userModels.first.npm ?? "",
+                      data: widget.userModel.id ?? "",
                       barcode: Barcode.code128(),
                       drawText: false,
                     ),

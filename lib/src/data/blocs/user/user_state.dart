@@ -20,9 +20,9 @@ class GetUserErrorState extends UserState {
 }
 
 class GetUserSuccessState extends UserState {
-  List<UserModels> userModels;
+  UserModel userModel;
 
-  GetUserSuccessState(this.userModels);
+  GetUserSuccessState(this.userModel);
 
   @override
   List<Object> get props => [];

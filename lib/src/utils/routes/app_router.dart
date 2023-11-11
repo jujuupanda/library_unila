@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:library_unila/src/data/models/book_models.dart';
 import 'package:library_unila/src/data/models/borrow_models.dart';
-import 'package:library_unila/src/data/models/user_models.dart';
 import 'package:library_unila/src/pages/barcode_ktm/barcode_ktm.dart';
 import 'package:library_unila/src/pages/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import 'package:library_unila/src/pages/history/history.dart';
 import 'package:library_unila/src/pages/setting/setting.dart';
 import 'package:library_unila/src/pages/sign_in/sign_in.dart';
 import 'package:library_unila/src/pages/status/status.dart';
+import '../../data/models/user_model.dart';
 import '../../pages/bottom_navigation/home/home.dart';
 import '../../pages/detail_history/detail_history.dart';
 import '../../pages/splash/splash.dart';
@@ -66,7 +66,7 @@ class AppRouter {
                       path: 'barcodeKTM',
                       name: Routes.barcodeKTM,
                       builder: (context, state) {
-                        return BarcodeKTM(key: state.pageKey, userModels: state.extra as List<UserModels>,);
+                        return BarcodeKTM(key: state.pageKey, userModel: state.extra as UserModel);
                       },
                     ),
                     GoRoute(
@@ -205,7 +205,7 @@ class AppRouter {
         parentNavigatorKey: _rootNavigatorKeys,
         builder: (context, state) {
           return EditProfilePage(
-            userModels: state.extra as List<UserModels>,
+            userModel: state.extra as UserModel,
           );
         },
       ),

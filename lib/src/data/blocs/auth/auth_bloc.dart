@@ -42,8 +42,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future _OnSignInEvent(OnSignInEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
-    var token = await repository.signInClass.signIn(event.npm, event.password);
-    print(token);
+    await repository.signInClass.signIn(event.npm, event.password);
     if (repository.signInClass.errorMessageSignIn == "" && repository.signInClass.token != "") {
       _setToken("token", repository.signInClass.token);
       emit(SignInSuccessState());

@@ -51,6 +51,7 @@ dependencies:
   barcode_widget: ^2.0.4
   grouped_list: ^5.1.2
   loader_overlay: ^2.3.2
+  jwt_decoder: ^2.0.1
 
 
 dev_dependencies:

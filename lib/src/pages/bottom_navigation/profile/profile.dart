@@ -25,8 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString("token");
     if (token != null) {
-      var user = _getUser(token);
-      print(user);
+      _getUser(token);
       print("profile page token $token");
       return token;
     } else {
