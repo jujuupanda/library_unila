@@ -13,4 +13,12 @@ class GetUserEvent extends UserEvent {
   GetUserEvent(this.token);
 }
 
-class UpdateUserEvent extends UserEvent {}
+class UpdateUserEvent extends UserEvent {
+  String token;
+  String npm;
+  String email;
+  String phone;
+  String address;
+
+  UpdateUserEvent(this.token, this.npm, this.email, this.phone, this.address);
+}

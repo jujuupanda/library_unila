@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../repositories/auth_repository/auth_repository.dart';
@@ -26,7 +27,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (token == null || token.isEmpty) {
       emit(UnAuthenticated());
     } else {
-      emit(IsAuthenticated());
+      DateTime expirationDate = JwtDecoder.getExpirationDate(token);
+      bool isExpired = expirationDate.isBefore(DateTime.now());
+      if (isExpired == true) {
+        _removeToken(token);
+        emit(UnAuthenticated());
+      } else {
+        emit(IsAuthenticated());
+      }
     }
   }
 
@@ -43,7 +51,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future _OnSignInEvent(OnSignInEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
     await repository.signInClass.signIn(event.npm, event.password);
-    if (repository.signInClass.errorMessageSignIn == "" && repository.signInClass.token != "") {
+    if (repository.signInClass.errorMessageSignIn == "" &&
+        repository.signInClass.token != "") {
       _setToken("token", repository.signInClass.token);
       emit(SignInSuccessState());
     } else {

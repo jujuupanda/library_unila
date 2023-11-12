@@ -66,7 +66,9 @@ class AppRouter {
                       path: 'barcodeKTM',
                       name: Routes.barcodeKTM,
                       builder: (context, state) {
-                        return BarcodeKTM(key: state.pageKey, userModel: state.extra as UserModel);
+                        return BarcodeKTM(
+                            key: state.pageKey,
+                            userModel: state.extra as UserModel);
                       },
                     ),
                     GoRoute(
@@ -80,7 +82,9 @@ class AppRouter {
                             path: 'detailStatus',
                             name: Routes.detailStatus,
                             builder: (context, state) {
-                              return DetailStatusPage(status: state.extra as BorrowModels,);
+                              return DetailStatusPage(
+                                status: state.extra as BorrowModels,
+                              );
                             },
                           )
                         ]),
@@ -95,7 +99,9 @@ class AppRouter {
                             path: 'detailHistory',
                             name: Routes.detailHistory,
                             builder: (context, state) {
-                              return DetailHistoryPage(history: state.extra as BorrowModels,);
+                              return DetailHistoryPage(
+                                history: state.extra as BorrowModels,
+                              );
                             },
                           )
                         ]),
@@ -141,25 +147,14 @@ class AppRouter {
             navigatorKey: _rootNavigatorProfile,
             routes: [
               GoRoute(
-                  path: '/profile',
-                  name: Routes.profile,
-                  builder: (context, state) {
-                    return ProfilePage(
-                      key: state.pageKey,
-                    );
-                  },
-                  routes: [
-                    // GoRoute(
-                    //   path: 'setting',
-                    //   name: Routes.setting,
-                    //   parentNavigatorKey: _rootNavigatorKeys,
-                    //   builder: (context, state) {
-                    //     return SettingPage(
-                    //       key: state.pageKey,
-                    //     );
-                    //   },
-                    // )
-                  ]),
+                path: '/profile',
+                name: Routes.profile,
+                builder: (context, state) {
+                  return ProfilePage(
+                    key: state.pageKey,
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -175,7 +170,7 @@ class AppRouter {
         parentNavigatorKey: _rootNavigatorKeys,
         builder: (context, state) {
           return ChangePasswordPage(
-            key: state.pageKey,
+            userModel: state.extra as UserModel,
           );
         },
       ),

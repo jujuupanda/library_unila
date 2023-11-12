@@ -15,7 +15,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc({required this.repository}) : super(UserInitialState()) {
     on<GetUserEvent>(_GetUserEvent);
-    on<UpdateUserEvent>(_UpdateUserEvent);
   }
 
   _GetUserEvent(GetUserEvent event, Emitter<UserState> emit) async {
@@ -28,5 +27,4 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  _UpdateUserEvent(UpdateUserEvent event, Emitter<UserState> emit) async {}
 }

@@ -13,6 +13,10 @@ class UserLoadingState extends UserState {
   @override
   List<Object> get props => [];
 }
+class UpdateUserLoadingState extends UserState {
+  @override
+  List<Object> get props => [];
+}
 
 class GetUserErrorState extends UserState {
   @override
