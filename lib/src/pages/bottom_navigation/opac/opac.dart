@@ -3,8 +3,6 @@ import 'package:library_unila/src/pages/utils/search.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 
-import '../../../data/blocs/opac/opac_bloc.dart';
-
 class OpacPage extends StatefulWidget {
   const OpacPage({Key? key}) : super(key: key);
 
@@ -14,7 +12,6 @@ class OpacPage extends StatefulWidget {
 
 class _OpacPageState extends State<OpacPage> {
   TextEditingController searchController = TextEditingController();
-  late OpacBloc opacBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -102,19 +99,14 @@ class _OpacPageState extends State<OpacPage> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          context.goNamed(Routes.signIn);
-                        },
-                        child: const Text(
-                          "OPAC Unila",
-                          style: TextStyle(
-                              fontSize: 40,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
-                        ),
+                    children: const [
+                      Text(
+                        "OPAC Unila",
+                        style: TextStyle(
+                            fontSize: 40,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
                       ),
                       const Text(
                         "Layanan Online Public Access Catalog Universitas Lampung",

@@ -15,7 +15,7 @@ class OpacLoadingState extends OpacState {
 }
 
 class GetOpacSuccessState extends OpacState {
-  List<BookModels> listBook;
+  List<BookModel> listBook;
 
   GetOpacSuccessState(this.listBook);
 
