@@ -15,12 +15,12 @@ class AuthorLoadingState extends AuthorState {
 }
 
 class AuthorSuccessState extends AuthorState {
-  List<AuthorModel> authorModel;
+  List<AuthorModel> listAuthor;
 
-  AuthorSuccessState(this.authorModel);
+  AuthorSuccessState(this.listAuthor);
 
   @override
-  List<Object> get props => [authorModel];
+  List<Object> get props => [listAuthor];
 }
 
 class AuthorErrorState extends AuthorState {

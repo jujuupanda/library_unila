@@ -11,7 +11,7 @@ class GetOpacClass {
         final listBook =
             dynamicResponse.map((e) => BookModel.fromJson(e)).toList();
         return listBook;
-      } else  {
+      } else {
         List<BookModel> listBook = [];
         return listBook;
       }
@@ -27,7 +27,7 @@ class GetOpacClass {
       if (response.statusCode == 200) {
         List<dynamic> dynamicResponse = jsonDecode(response.body)['data'];
         final listBook =
-        dynamicResponse.map((e) => ItemBookModel.fromJson(e)).toList();
+            dynamicResponse.map((e) => ItemBookModel.fromJson(e)).toList();
         return listBook;
       } else {
         List<ItemBookModel> listItemBook = [];
@@ -37,6 +37,7 @@ class GetOpacClass {
       throw Exception(error);
     }
   }
+
   getAuthorBook(String bibId) async {
     final url = Uri.parse('http://172.16.1.47:4000/book/getBook/authorBook');
     try {
@@ -44,7 +45,7 @@ class GetOpacClass {
       if (response.statusCode == 200) {
         List<dynamic> dynamicResponse = jsonDecode(response.body)['data'];
         final listAuthor =
-        dynamicResponse.map((e) => ItemBookModel.fromJson(e)).toList();
+            dynamicResponse.map((e) => AuthorModel.fromJson(e)).toList();
         return listAuthor;
       } else {
         List<AuthorModel> listAuthor = [];
