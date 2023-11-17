@@ -5,13 +5,11 @@ import 'package:library_unila/src/pages/utils/book_card.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 
-import '../../data/blocs/opac/author/author_bloc.dart';
 
 class MySearch extends SearchDelegate {
   MySearch({Key? key});
 
   late OpacBloc _opacBloc;
-  late AuthorBloc _authorBloc;
   final parsingBook = _ParsingBook();
 
   _getListBook(BuildContext context, String keyword) {
@@ -19,10 +17,6 @@ class MySearch extends SearchDelegate {
     _opacBloc.add(GetOpacEvent(keyword));
   }
 
-  _authorBook(BuildContext context, String bibId) {
-    _authorBloc = context.read<AuthorBloc>();
-    _authorBloc.add(GetAuthorBook(bibId));
-  }
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -52,6 +46,9 @@ class MySearch extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    if (query == "") {
+      return const SizedBox();
+    }
     _getListBook(context, query);
     return BlocBuilder<OpacBloc, OpacState>(
       builder: (context, state) {
@@ -70,29 +67,15 @@ class MySearch extends SearchDelegate {
               ),
             );
           }
-          // listBook[index]
-          //     .eTitBib!
-          //     .eBib!
-          //     .eAutBib!
-          //     .eAut!
-          //     .autKey!
           return ListView.builder(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             itemCount: listBook.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: BookCard(
-                    title:
-                    parsingBook.parsingTitle(listBook[index].titKey!),
-                    noCall: listBook[index].eTitBib!.eBib!.calKey ?? "",
-                    author: parsingBook.parsingAuthor(listBook[index]
-                        .eTitBib!
-                        .eBib!
-                        .eAutBib!
-                        .eAut!
-                        .autKey!),
+                    title: parsingBook.parsingTitle(listBook[index].titKey!),
+                    noCall: listBook[index].eTitBib!.eBib!.calKey?.toUpperCase() ?? "",
                     function: () {
                       context.pushNamed(Routes.detailBook,
                           extra: listBook[index]);

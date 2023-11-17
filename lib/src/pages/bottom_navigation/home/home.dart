@@ -84,103 +84,112 @@ class _HomePageState extends State<HomePage> {
               return Column(
                 children: [
                   const HeaderHome(),
-                  const SizedBox(height: 20),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          BlocBuilder<BorrowBloc, BorrowState>(
-                            builder: (context, state) {
-                              if (state is GetBorrowSuccessState) {
-                                return StatusMenuHome(
-                                    colorPrimary: Colors.green,
-                                    colorSecondary: Colors.greenAccent,
-                                    nameStatusMenuHome:
-                                        "Peminjaman Yang Sedang Dilakukan:",
-                                    valueStatusMenuHome:
-                                        "${state.listBorrow.length} Buku");
-                              }
-                              return StatusMenuHome(
-                                  colorPrimary: Colors.green,
-                                  colorSecondary: Colors.greenAccent,
-                                  nameStatusMenuHome:
-                                      "Peminjaman Yang Sedang Dilakukan:",
-                                  valueStatusMenuHome: "0 Buku");
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          BlocBuilder<BorrowBloc, BorrowState>(
-                            builder: (context, state) {
-                              if (state is GetBorrowSuccessState) {
-                                return StatusMenuHome(
-                                    colorPrimary: Colors.yellow,
-                                    colorSecondary: Colors.yellowAccent,
-                                    nameStatusMenuHome:
-                                        "Peminjaman Yang Melewati Batas Waktu:",
-                                    valueStatusMenuHome:
-                                        "${state.listBorrow.where((element) => DateTime.now().isAfter(DateTime.parse(element.dateBorrow!).add(const Duration(days: 7)))).length} Buku");
-                              }
-                              return StatusMenuHome(
-                                  colorPrimary: Colors.yellow,
-                                  colorSecondary: Colors.yellowAccent,
-                                  nameStatusMenuHome:
-                                      "Peminjaman Yang Melewati Batas Waktu:",
-                                  valueStatusMenuHome: "0 Buku");
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          StatusMenuHome(
-                              colorPrimary: Colors.red,
-                              colorSecondary: Colors.redAccent,
-                              nameStatusMenuHome: "Denda:",
-                              valueStatusMenuHome: "0"),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
                             children: [
-                              MenuHome(
-                                  menuImage: imageBarcode,
-                                  menuName: "Barcode KTM",
-                                  function: () {
-                                    context.pushNamed(Routes.barcodeKTM,
-                                        extra: state.userModel);
-                                  }),
-                              MenuHome(
-                                  menuImage: imageStatus,
-                                  menuName: "Status Pinjam",
-                                  function: () {
-                                    context.pushNamed(Routes.status);
-                                  }),
-                              MenuHome(
-                                  menuImage: imageHistory,
-                                  menuName: "History Pinjam",
-                                  function: () {
-                                    context.pushNamed(Routes.history);
-                                  })
+                              BlocBuilder<BorrowBloc, BorrowState>(
+                                builder: (context, state) {
+                                  if (state is GetBorrowSuccessState) {
+                                    return StatusMenuHome(
+                                        colorPrimary: Colors.green,
+                                        colorSecondary: Colors.greenAccent,
+                                        nameStatusMenuHome:
+                                            "Peminjaman Yang Sedang Dilakukan:",
+                                        valueStatusMenuHome:
+                                            "${state.listBorrow.length} Buku");
+                                  }
+                                  return StatusMenuHome(
+                                      colorPrimary: Colors.green,
+                                      colorSecondary: Colors.greenAccent,
+                                      nameStatusMenuHome:
+                                          "Peminjaman Yang Sedang Dilakukan:",
+                                      valueStatusMenuHome: "0 Buku");
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              BlocBuilder<BorrowBloc, BorrowState>(
+                                builder: (context, state) {
+                                  if (state is GetBorrowSuccessState) {
+                                    return StatusMenuHome(
+                                        colorPrimary: Colors.yellow,
+                                        colorSecondary: Colors.yellowAccent,
+                                        nameStatusMenuHome:
+                                            "Peminjaman Yang Melewati Batas Waktu:",
+                                        valueStatusMenuHome:
+                                            "${state.listBorrow.where((element) => DateTime.now().isAfter(DateTime.parse(element.dateBorrow!).add(const Duration(days: 7)))).length} Buku");
+                                  }
+                                  return StatusMenuHome(
+                                      colorPrimary: Colors.yellow,
+                                      colorSecondary: Colors.yellowAccent,
+                                      nameStatusMenuHome:
+                                          "Peminjaman Yang Melewati Batas Waktu:",
+                                      valueStatusMenuHome: "0 Buku");
+                                },
+                              ),
+                              const SizedBox(height: 10),
+                              StatusMenuHome(
+                                  colorPrimary: Colors.red,
+                                  colorSecondary: Colors.redAccent,
+                                  nameStatusMenuHome: "Denda:",
+                                  valueStatusMenuHome: "0"),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  MenuHome(
+                                      menuImage: imageBarcode,
+                                      menuName: "Barcode KTM",
+                                      function: () {
+                                        context.pushNamed(Routes.barcodeKTM,
+                                            extra: state.userModel);
+                                      }),
+                                  MenuHome(
+                                      menuImage: imageStatus,
+                                      menuName: "Status Pinjam",
+                                      function: () {
+                                        context.pushNamed(Routes.status);
+                                      }),
+                                  MenuHome(
+                                      menuImage: imageHistory,
+                                      menuName: "History Pinjam",
+                                      function: () {
+                                        context.pushNamed(Routes.history);
+                                      })
+                                ],
+                              ),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  MenuHome(
+                                      menuImage: imageChecklist,
+                                      menuName: "Lengkapi Akun",
+                                      function: () {
+                                        context.pushNamed(Routes.edit,
+                                            extra: state.userModel);
+                                      }),
+                                  MenuHome(
+                                      menuImage: imageHelp,
+                                      menuName: "Bantuan",
+                                      function: () {
+                                        context.pushNamed(Routes.help);
+                                      }),
+                                  const SizedBox(height: 90, width: 90),
+                                ],
+                              ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              MenuHome(
-                                  menuImage: imageChecklist,
-                                  menuName: "Lengkapi Akun",
-                                  function: () {
-                                    context.pushNamed(Routes.edit,
-                                        extra: state.userModel);
-                                  }),
-                              MenuHome(
-                                  menuImage: imageHelp,
-                                  menuName: "Bantuan",
-                                  function: () {
-                                    context.pushNamed(Routes.help);
-                                  }),
-                              const SizedBox(height: 90, width: 90),
-                            ],
-                          ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               );
             } else {

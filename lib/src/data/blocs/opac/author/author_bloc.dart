@@ -16,7 +16,6 @@ class AuthorBloc extends Bloc<AuthorEvent, AuthorState> {
   AuthorBloc({required this.repository}) : super(AuthorInitialState()) {
     on<GetAuthorBook>(_GetAuthorBook);
   }
-
   _GetAuthorBook(GetAuthorBook event, Emitter emit) async {
     emit(AuthorLoadingState());
     try {

@@ -54,7 +54,6 @@ class EBib {
     this.calKey,
     this.ediRaw,
     this.pubRaw,
-    this.eAutBib,
     this.eIdn,});
 
   EBib.fromJson(dynamic json) {
@@ -62,14 +61,12 @@ class EBib {
     calKey = json['CalKey'];
     ediRaw = json['EdiRaw'];
     pubRaw = json['PubRaw'];
-    eAutBib = json['EAutBib'] != null ? EAutBib.fromJson(json['EAutBib']) : null;
     eIdn = json['EIdn'] != null ? EIdn.fromJson(json['EIdn']) : null;
   }
   int? bibId;
   String? calKey;
   String? ediRaw;
   String? pubRaw;
-  EAutBib? eAutBib;
   EIdn? eIdn;
 
   Map<String, dynamic> toJson() {
@@ -78,9 +75,6 @@ class EBib {
     map['CalKey'] = calKey;
     map['EdiRaw'] = ediRaw;
     map['PubRaw'] = pubRaw;
-    if (eAutBib != null) {
-      map['EAutBib'] = eAutBib?.toJson();
-    }
     if (eIdn != null) {
       map['EIdn'] = eIdn?.toJson();
     }
@@ -109,46 +103,6 @@ class EIdn {
     map['IdnBibId'] = idnBibId;
     map['IdnId'] = idnId;
     map['IdnKey'] = idnKey;
-    return map;
-  }
-
-}
-
-class EAutBib {
-  EAutBib({
-    this.aBAutId,
-    this.eAut,});
-
-  EAutBib.fromJson(dynamic json) {
-    aBAutId = json['ABAutId'];
-    eAut = json['EAut'] != null ? EAut.fromJson(json['EAut']) : null;
-  }
-  int? aBAutId;
-  EAut? eAut;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['ABAutId'] = aBAutId;
-    if (eAut != null) {
-      map['EAut'] = eAut?.toJson();
-    }
-    return map;
-  }
-
-}
-
-class EAut {
-  EAut({
-    this.autKey,});
-
-  EAut.fromJson(dynamic json) {
-    autKey = json['AutKey'];
-  }
-  String? autKey;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['AutKey'] = autKey;
     return map;
   }
 

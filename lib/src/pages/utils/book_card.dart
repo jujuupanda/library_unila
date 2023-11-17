@@ -12,7 +12,7 @@ class BookCard extends StatefulWidget {
     Key? key,
     required this.title,
     required this.noCall,
-    required this.author,
+    // required this.author,
     required this.function,
   }) : super(key: key);
 
@@ -74,20 +74,20 @@ class _BookCardState extends State<BookCard> {
                     ],
                   ),
                 ),
-                RichText(
-                  text: TextSpan(
-                    style: DefaultTextStyle.of(context).style, // Gaya default
-                    children: <TextSpan>[
-                      const TextSpan(
-                        text: "Penulis: ",
-                        style: bookInformationGrey,
-                      ),
-                      TextSpan(
-                          text: widget.author!.isNotEmpty ? widget.author! : "",
-                          style: bookInformationBlack),
-                    ],
-                  ),
-                ),
+                // RichText(
+                //   text: TextSpan(
+                //     style: DefaultTextStyle.of(context).style, // Gaya default
+                //     children: <TextSpan>[
+                //       const TextSpan(
+                //         text: "Penulis: ",
+                //         style: bookInformationGrey,
+                //       ),
+                //       TextSpan(
+                //           text: widget.author!.isNotEmpty ? widget.author! : "",
+                //           style: bookInformationBlack),
+                //     ],
+                //   ),
+                // ),
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.bottomRight,
