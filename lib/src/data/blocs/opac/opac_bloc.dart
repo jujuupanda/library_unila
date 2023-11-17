@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../models/book_models.dart';
+import '../../models/book_model.dart';
 import '../../repositories/opac_repositories/opac_repository.dart';
 
 part 'opac_event.dart';
@@ -19,9 +19,7 @@ class OpacBloc extends Bloc<OpacEvent, OpacState> {
 
   _GetOpacEvent(GetOpacEvent event, Emitter<OpacState> emit) async {
     emit(OpacLoadingState());
-    await Future.delayed(const Duration(seconds: 1), () {
-      final listBook = repository.opacGetClass.getOpac(event.keyword);
-      emit(GetOpacSuccessState(listBook));
-    });
+    final listBook = await repository.getOpacClass.getOpac(event.keyword);
+    emit(GetOpacSuccessState(listBook));
   }
 }

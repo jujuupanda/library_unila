@@ -4,6 +4,8 @@ import 'package:library_unila/app.dart';
 import 'package:library_unila/src/data/blocs/auth/auth_bloc.dart';
 import 'package:library_unila/src/data/blocs/borrow/borrow_bloc.dart';
 import 'package:library_unila/src/data/blocs/history/history_bloc.dart';
+import 'package:library_unila/src/data/blocs/opac/author/author_bloc.dart';
+import 'package:library_unila/src/data/blocs/opac/item_book/item_book_bloc.dart';
 import 'package:library_unila/src/data/blocs/opac/opac_bloc.dart';
 import 'package:library_unila/src/data/blocs/update/password/password_bloc.dart';
 import 'package:library_unila/src/data/blocs/update/user_information/user_info_bloc.dart';
@@ -41,7 +43,6 @@ class MyApp extends StatelessWidget {
           RepositoryProvider(
             create: (context) => HistoryRepository(),
           ),
-
         ],
         child: MultiBlocProvider(providers: [
           BlocProvider(
@@ -58,6 +59,12 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => OpacBloc(repository: OpacRepository()),
+          ),
+          BlocProvider(
+            create: (context) => ItemBookBloc(repository: OpacRepository()),
+          ),
+          BlocProvider(
+            create: (context) => AuthorBloc(repository: OpacRepository()),
           ),
           BlocProvider(
             create: (context) => BorrowBloc(repository: BorrowRepository()),
