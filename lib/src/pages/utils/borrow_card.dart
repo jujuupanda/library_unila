@@ -5,17 +5,19 @@ import '../../utils/constants/constant.dart';
 
 class BorrowCard extends StatefulWidget {
   String? title;
-  String? author;
   String? noCall;
-  String? dateReturn;
+  String? borrowDate;
+  String? dueDate;
+  String? returnDate;
   VoidCallback? function;
 
   BorrowCard({
     Key? key,
     required this.title,
     required this.noCall,
-    required this.author,
-    required this.dateReturn,
+    required this.borrowDate,
+    required this.dueDate,
+    required this.returnDate,
     required this.function,
   }) : super(key: key);
 
@@ -24,6 +26,8 @@ class BorrowCard extends StatefulWidget {
 }
 
 class _BorrowCardState extends State<BorrowCard> {
+  final parsingBook = _ParsingBook();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,7 +63,7 @@ class _BorrowCardState extends State<BorrowCard> {
               children: [
                 const Text(bookTitle, style: bookInformationGrey),
                 Text(
-                  widget.title!,
+                  parsingBook.parsingTitle(widget.title!),
                   style: titleBook,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -73,7 +77,7 @@ class _BorrowCardState extends State<BorrowCard> {
                         style: bookInformationGrey,
                       ),
                       TextSpan(
-                          text: widget.noCall!, style: bookInformationBlack),
+                          text: widget.noCall!.toUpperCase(), style: bookInformationBlack),
                     ],
                   ),
                 ),
@@ -82,11 +86,14 @@ class _BorrowCardState extends State<BorrowCard> {
                     style: DefaultTextStyle.of(context).style,
                     children: <TextSpan>[
                       const TextSpan(
-                        text: bookAuthor,
+                        text: bookDateBorrow,
                         style: bookInformationGrey,
                       ),
                       TextSpan(
-                          text: widget.author, style: bookInformationBlack),
+                          text: widget.borrowDate!.isNotEmpty
+                              ? parsingBook.convertMonth(widget.borrowDate!)
+                              : "",
+                          style: bookInformationBlack),
                     ],
                   ),
                 ),
@@ -99,13 +106,30 @@ class _BorrowCardState extends State<BorrowCard> {
                         style: bookInformationGrey,
                       ),
                       TextSpan(
-                          text: widget.dateReturn!.isNotEmpty
-                              ? "${DateFormat('dd MMMM yyyy').format(DateTime.parse(widget.dateReturn!))}"
+                          text: widget.returnDate!.isNotEmpty
+                              ? parsingBook.convertMonth(widget.returnDate!)
                               : "",
                           style: bookInformationBlack),
                     ],
                   ),
                 ),
+                RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    children: <TextSpan>[
+                      const TextSpan(
+                        text: bookDueDate,
+                        style: bookInformationGrey,
+                      ),
+                      TextSpan(
+                          text: widget.dueDate!.isNotEmpty
+                              ? parsingBook.convertMonth(widget.dueDate!)
+                              : "",
+                          style: bookInformationBlack),
+                    ],
+                  ),
+                ),
+
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.bottomRight,
@@ -136,4 +160,58 @@ class _BorrowCardState extends State<BorrowCard> {
       ),
     );
   }
+}
+
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join(' ');
+}
+
+class _ParsingBook {
+  parsingTitle(String title) {
+    return title == "" || title == "-" ? "" : title.toTitleCase();
+  }
+  String convertMonth(String input) {
+    final parsedEnglish = DateFormat('dd MMMM yyyy').format(DateTime.parse(input));
+    return parsedEnglish.replaceAllMapped(
+      RegExp(r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\b'),
+          (Match match) {
+        switch (match.group(0)) {
+          case 'January':
+            return 'Januari';
+          case 'February':
+            return 'Februari';
+          case 'March':
+            return 'Maret';
+          case 'April':
+            return 'April';
+          case 'May':
+            return 'Mei';
+          case 'June':
+            return 'Juni';
+          case 'July':
+            return 'Juli';
+          case 'August':
+            return 'Agustus';
+          case 'September':
+            return 'September';
+          case 'October':
+            return 'Oktober';
+          case 'November':
+            return 'November';
+          case 'December':
+            return 'Desember';
+          default:
+            return match.group(0)!;
+        }
+      },
+    );
+  }
+
 }

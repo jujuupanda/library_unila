@@ -16,9 +16,9 @@ class HistoryLoadingState extends HistoryState {
 //History
 
 class GetHistorySuccessState extends HistoryState {
-  List<BorrowModels> listHistory;
+  final List<HistoryModel> listHistory;
 
-  GetHistorySuccessState(this.listHistory);
+  const GetHistorySuccessState(this.listHistory);
 
   @override
   List<Object> get props => [];

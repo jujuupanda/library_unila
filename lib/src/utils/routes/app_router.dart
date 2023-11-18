@@ -75,7 +75,9 @@ class AppRouter {
                         path: 'status',
                         name: Routes.status,
                         builder: (context, state) {
-                          return StatusPage(key: state.pageKey);
+                          return StatusPage(
+                            userModel: state.extra as UserModel,
+                          );
                         },
                         routes: [
                           GoRoute(
@@ -92,7 +94,9 @@ class AppRouter {
                         path: 'history',
                         name: Routes.history,
                         builder: (context, state) {
-                          return HistoryPage(key: state.pageKey);
+                          return HistoryPage(
+                            userModel: state.extra as UserModel,
+                          );
                         },
                         routes: [
                           GoRoute(

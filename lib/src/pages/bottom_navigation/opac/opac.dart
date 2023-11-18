@@ -108,7 +108,7 @@ class _OpacPageState extends State<OpacPage> {
                             fontWeight: FontWeight.w600,
                             color: Colors.white),
                       ),
-                      const Text(
+                      Text(
                         "Layanan Online Public Access Catalog Universitas Lampung",
                         textAlign: TextAlign.center,
                         style: TextStyle(

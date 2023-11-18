@@ -11,6 +11,7 @@ const bookTitle = "Judul:";
 const bookNoCall = "Nomor Panggil: ";
 const bookAuthor = "Penulis: ";
 const bookDateReturn = "Tgl. Kembali: ";
+const bookDueDate = "Batas Waktu: ";
 const bookDateBorrow = "Tgl. Pinjam: ";
 const bookDetailBorrow = "Detail Peminjaman";
 const bookDetailBook = "Detail Buku";
