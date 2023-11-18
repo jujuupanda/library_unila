@@ -9,9 +9,9 @@ import '../../data/blocs/opac/item_book/item_book_bloc.dart';
 import '../../data/models/book_model.dart';
 
 class DetailBookPage extends StatefulWidget {
-  BookModel bookModel;
+  final BookModel bookModel;
 
-  DetailBookPage({Key? key, required this.bookModel}) : super(key: key);
+  const DetailBookPage({Key? key, required this.bookModel}) : super(key: key);
 
   @override
   State<DetailBookPage> createState() => _DetailBookPageState();
@@ -356,6 +356,8 @@ class _ParsingItemBook {
         return "Disiangi";
       case ("TDK"):
         return "Tidak Untuk Dipinjam";
+      case (""):
+        return "Tersedia";
       default:
         return "Tersedia";
     }

@@ -7,9 +7,7 @@ abstract class HistoryEvent extends Equatable {
 }
 
 class GetHistoryEvent extends HistoryEvent {
-  String npm;
+  final String npm;
 
-  GetHistoryEvent(this.npm);
+  const GetHistoryEvent(this.npm);
 }
-
-class PostHistoryEvent extends HistoryEvent {}

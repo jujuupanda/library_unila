@@ -2,58 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
-import 'package:library_unila/src/pages/utils/borrow_card.dart';
 import 'package:library_unila/src/pages/utils/header_page.dart';
+import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/blocs/borrow/borrow_bloc.dart';
-import '../../data/models/borrow_models.dart';
-import '../../utils/constants/constant.dart';
+import '../../data/blocs/circulation/history/history_bloc.dart';
+import '../../data/blocs/circulation/status/status_bloc.dart';
+import '../../data/models/history_model.dart';
+import '../../data/models/user_model.dart';
+import '../utils/borrow_card.dart';
 
 class StatusPage extends StatefulWidget {
-  StatusPage({Key? key}) : super(key: key);
+  final UserModel userModel;
+
+  const StatusPage({Key? key, required this.userModel}) : super(key: key);
 
   @override
   State<StatusPage> createState() => _StatusPageState();
 }
 
 class _StatusPageState extends State<StatusPage> {
-  late BorrowBloc borrowBloc;
-  late String tokenUser;
+  late StatusBloc statusBloc;
 
-  Future<String?> _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString("token");
-    if (token != null && token != "") {
-      return tokenUser = token;
-    } else {
-      print("status page token not found");
-    }
-    return null;
-  }
-
-  _getBorrow(String token) {
-    borrowBloc = context.read<BorrowBloc>();
-    borrowBloc.add(GetBorrowEvent(token));
+  _getStatus(String npm) {
+    statusBloc = context.read<StatusBloc>();
+    statusBloc.add(GetStatusEvent(npm));
   }
 
   @override
-  void didChangeDependencies() {
-    _getToken().then((value) {
-      if (value != null) {
-        _getBorrow(value);
-      }
-    });
-    super.didChangeDependencies();
+  void initState() {
+    _getStatus(widget.userModel.id!);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final parsingBook = _ParsingBook();
+
     return Scaffold(
-      body: BlocBuilder<BorrowBloc, BorrowState>(
+      body: BlocBuilder<StatusBloc, StatusState>(
         builder: (context, state) {
-          if (state is GetBorrowSuccessState) {
+          if (state is GetStatusSuccessState) {
             return Column(
               children: [
                 HeaderAllPage(
@@ -61,13 +50,13 @@ class _StatusPageState extends State<StatusPage> {
                     function: () {
                       context.pop();
                     }),
-                if (state.listBorrow.isNotEmpty)
+                if (state.listStatus.isNotEmpty)
                   Expanded(
-                    child: GroupedListView<BorrowModels, String>(
+                    child: GroupedListView<HistoryModel, String>(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
-                      elements: state.listBorrow,
-                      groupBy: (element) => element.dateBorrow!,
+                      elements: state.listStatus,
+                      groupBy: (element) => element.chkODate!,
                       order: GroupedListOrder.DESC,
                       groupSeparatorBuilder: (String groupByValue) {
                         return Padding(
@@ -75,8 +64,7 @@ class _StatusPageState extends State<StatusPage> {
                           child: Column(
                             children: [
                               Text(
-                                DateFormat('dd MMMM yyyy')
-                                    .format(DateTime.parse(groupByValue)),
+                                parsingBook.convertMonth(groupByValue),
                                 style: const TextStyle(
                                   fontFamily: "Poppins",
                                   fontSize: 20,
@@ -97,10 +85,12 @@ class _StatusPageState extends State<StatusPage> {
                         return Column(
                           children: [
                             BorrowCard(
-                                title: element.title,
-                                noCall: element.noCall,
-                                author: element.author,
-                                dateReturn: element.dateReturn,
+                                title: element.cItem!.eTitBib!.eTit!.titKey!,
+                                noCall:
+                                    "${element.cItem!.eBib!.calKey!} ${element.cItem!.copyNo.toString()}",
+                                borrowDate: element.chkODate != null ? element.chkODate.toString() : "",
+                                dueDate: element.dueDate != null ? element.dueDate.toString() : "",
+                                returnDate: element.chkIDate != null ? element.chkIDate.toString() : "",
                                 function: () {
                                   context.pushNamed(Routes.detailStatus,
                                       extra: element);
@@ -113,11 +103,14 @@ class _StatusPageState extends State<StatusPage> {
                   )
                 else
                   const Expanded(
-                    child: Center(
-                      child: Text(
-                        "Anda tidak memiliki riwayat peminjaman buku",
-                        style: poppinsBig,
-                        textAlign: TextAlign.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          "Anda tidak memiliki peminjaman buku yang sedang berlangsung",
+                          style: poppinsBig,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
@@ -129,6 +122,51 @@ class _StatusPageState extends State<StatusPage> {
           );
         },
       ),
+    );
+  }
+}
+
+class _ParsingBook {
+  parsingTitle(String title) {
+    return title == "" || title == "-" ? "" : title.toTitleCase();
+  }
+
+  String convertMonth(String input) {
+    final parsedEnglish =
+        DateFormat('dd MMMM yyyy').format(DateTime.parse(input));
+    return parsedEnglish.replaceAllMapped(
+      RegExp(
+          r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\b'),
+      (Match match) {
+        switch (match.group(0)) {
+          case 'January':
+            return 'Januari';
+          case 'February':
+            return 'Februari';
+          case 'March':
+            return 'Maret';
+          case 'April':
+            return 'April';
+          case 'May':
+            return 'Mei';
+          case 'June':
+            return 'Juni';
+          case 'July':
+            return 'Juli';
+          case 'August':
+            return 'Agustus';
+          case 'September':
+            return 'September';
+          case 'October':
+            return 'Oktober';
+          case 'November':
+            return 'November';
+          case 'December':
+            return 'Desember';
+          default:
+            return match.group(0)!;
+        }
+      },
     );
   }
 }

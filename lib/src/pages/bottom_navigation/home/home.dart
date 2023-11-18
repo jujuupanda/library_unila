@@ -8,7 +8,7 @@ import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../data/blocs/borrow/borrow_bloc.dart';
+import '../../../data/blocs/circulation/status/status_bloc.dart';
 import '../../../data/blocs/user/user_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +21,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String tokenUser;
   late UserBloc _userBloc;
-  late BorrowBloc _borrowBloc;
+  late StatusBloc _statusBloc;
   NumberFormat currencyFormatter = NumberFormat.currency(
     locale: 'id',
     symbol: 'Rp ',
@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
 
     final token = prefs.getString("token");
     if (token != null) {
+      _getUser(token);
       // tokenUser = token;
       // print("home page token $token");
       return token;
@@ -47,15 +48,15 @@ class _HomePageState extends State<HomePage> {
     _userBloc.add(GetUserEvent(token));
   }
 
-  _getDataBorrow(String token) {
-    _borrowBloc = context.read<BorrowBloc>();
-    _borrowBloc.add(GetBorrowEvent(token));
+  _getStatus(String npm) {
+    _statusBloc = context.read<StatusBloc>();
+    _statusBloc.add(GetStatusEvent(npm));
   }
 
   @override
-  void didChangeDependencies() {
-    _getToken().then((token) => _getUser(token!));
-    super.didChangeDependencies();
+  void initState() {
+    _getToken();
+    super.initState();
   }
 
   @override
@@ -81,6 +82,7 @@ class _HomePageState extends State<HomePage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (state is GetUserSuccessState) {
+              _getStatus(state.userModel.id!);
               return Column(
                 children: [
                   const HeaderHome(),
@@ -92,16 +94,16 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             children: [
-                              BlocBuilder<BorrowBloc, BorrowState>(
+                              BlocBuilder<StatusBloc, StatusState>(
                                 builder: (context, state) {
-                                  if (state is GetBorrowSuccessState) {
+                                  if (state is GetStatusSuccessState) {
                                     return StatusMenuHome(
                                         colorPrimary: Colors.green,
                                         colorSecondary: Colors.greenAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Sedang Dilakukan:",
                                         valueStatusMenuHome:
-                                            "${state.listBorrow.length} Buku");
+                                            "${state.listStatus.length} Buku");
                                   }
                                   return StatusMenuHome(
                                       colorPrimary: Colors.green,
@@ -112,16 +114,16 @@ class _HomePageState extends State<HomePage> {
                                 },
                               ),
                               const SizedBox(height: 10),
-                              BlocBuilder<BorrowBloc, BorrowState>(
+                              BlocBuilder<StatusBloc, StatusState>(
                                 builder: (context, state) {
-                                  if (state is GetBorrowSuccessState) {
+                                  if (state is GetStatusSuccessState) {
                                     return StatusMenuHome(
                                         colorPrimary: Colors.yellow,
                                         colorSecondary: Colors.yellowAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Melewati Batas Waktu:",
                                         valueStatusMenuHome:
-                                            "${state.listBorrow.where((element) => DateTime.now().isAfter(DateTime.parse(element.dateBorrow!).add(const Duration(days: 7)))).length} Buku");
+                                            "${state.listStatus.where((element) => DateTime.now().isAfter(DateTime.parse(element.dueDate!))).length} Buku");
                                   }
                                   return StatusMenuHome(
                                       colorPrimary: Colors.yellow,
@@ -153,13 +155,15 @@ class _HomePageState extends State<HomePage> {
                                       menuImage: imageStatus,
                                       menuName: "Status Pinjam",
                                       function: () {
-                                        context.pushNamed(Routes.status);
+                                        context.pushNamed(Routes.status,
+                                            extra: state.userModel);
                                       }),
                                   MenuHome(
                                       menuImage: imageHistory,
                                       menuName: "History Pinjam",
                                       function: () {
-                                        context.pushNamed(Routes.history);
+                                        context.pushNamed(Routes.history,
+                                            extra: state.userModel);
                                       })
                                 ],
                               ),
