@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:library_unila/src/data/models/borrow_models.dart';
 import 'package:library_unila/src/pages/barcode_ktm/barcode_ktm.dart';
 import 'package:library_unila/src/pages/bottom_navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +14,7 @@ import 'package:library_unila/src/pages/setting/setting.dart';
 import 'package:library_unila/src/pages/sign_in/sign_in.dart';
 import 'package:library_unila/src/pages/status/status.dart';
 import '../../data/models/book_model.dart';
+import '../../data/models/history_model.dart';
 import '../../data/models/user_model.dart';
 import '../../pages/bottom_navigation/home/home.dart';
 import '../../pages/detail_history/detail_history.dart';
@@ -85,7 +85,7 @@ class AppRouter {
                             name: Routes.detailStatus,
                             builder: (context, state) {
                               return DetailStatusPage(
-                                status: state.extra as BorrowModels,
+                                status: state.extra as HistoryModel,
                               );
                             },
                           )
@@ -104,7 +104,7 @@ class AppRouter {
                             name: Routes.detailHistory,
                             builder: (context, state) {
                               return DetailHistoryPage(
-                                history: state.extra as BorrowModels,
+                                history: state.extra as HistoryModel,
                               );
                             },
                           )
