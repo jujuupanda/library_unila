@@ -54,127 +54,97 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        return await Future.delayed(const Duration(seconds: 1), () {
-          _getUser(tokenUser);
-        });
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is SignOutSuccessState) {
+          context.goNamed(Routes.signIn);
+        }
       },
-      child: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is SignOutSuccessState) {
-            context.goNamed(Routes.signIn);
-          }
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: BlocBuilder<AuthBloc, AuthState>(
-            builder: (context, state) {
-              if (state is AuthLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              return BlocBuilder<UserBloc, UserState>(
-                builder: (context, state) {
-                  if (state is UserLoadingState) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state is GetUserSuccessState) {
-                    return Column(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            Column(
+              children: [
+                Container(
+                  height: 120,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(color: colorPrimary),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          children: [
-                            Container(
-                              height: 120,
-                              width: MediaQuery.of(context).size.width,
-                              decoration:
-                                  const BoxDecoration(color: colorPrimary),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 16),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            "PERPUSTAKAAN",
-                                            style: headerHome1,
-                                          ),
-                                          Text(
-                                            "UNIVERSITAS LAMPUNG",
-                                            style: headerHome2,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colorBlueAnotherOpacity,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          splashColor: colorPrimaryOpacity,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          onTap: () {
-                                            context.pushNamed(Routes.edit,
-                                                extra: state.userModel);
-                                          },
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(6),
-                                            child: Icon(
-                                              Icons.edit,
-                                              size: 30,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: colorBlueAnotherOpacity,
-                                        borderRadius: BorderRadius.circular(30),
-                                      ),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          splashColor: colorPrimaryOpacity,
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          onTap: () {
-                                            showSnackBar(context);
-                                            // context.pushNamed(Routes.setting);
-                                          },
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(6),
-                                            child: Icon(
-                                              Icons.settings,
-                                              size: 30,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "PERPUSTAKAAN",
+                                style: headerHome1,
+                              ),
+                              Text(
+                                "UNIVERSITAS LAMPUNG",
+                                style: headerHome2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: colorBlueAnotherOpacity,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              splashColor: colorPrimaryOpacity,
+                              borderRadius: BorderRadius.circular(30),
+                              onTap: () {
+                                showSnackBar(context);
+                                // context.pushNamed(Routes.setting);
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(6),
+                                child: Icon(
+                                  Icons.settings,
+                                  size: 30,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-                            Container(height: 5, color: colorTertiary),
-                            Container(height: 8, color: colorSecondary),
-                          ],
-                        ),
-                        Expanded(
-                          child: ListView(
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(height: 5, color: colorTertiary),
+                Container(height: 8, color: colorSecondary),
+              ],
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  return await Future.delayed(const Duration(seconds: 1), () {
+                    _getUser(tokenUser);
+                  });
+                },
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (state is AuthLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is UserLoadingState) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        if (state is GetUserSuccessState) {
+                          return ListView(
                             children: [
                               Column(
                                 children: [
@@ -189,10 +159,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                       children: [
                                         ProfileInformation(
                                           nameInformation: "Nama",
-                                          information:
-                                              state.userModel.fName == null
-                                                  ? ""
-                                                  : state.userModel.fName!,
+                                          information: state.userModel.fName ==
+                                                  null
+                                              ? ""
+                                              : "${state.userModel.fName} ${state.userModel.lName == "-" ? "" : state.userModel.lName}",
                                         ),
                                         const SeparateLine(),
                                         ProfileInformation(
@@ -230,6 +200,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text("Update Profile",
+                                                style: poppinsNormal3),
+                                            InkWell(
+                                              onTap: () {
+                                                context.pushNamed(Routes.edit,
+                                                    extra: state.userModel);
+                                              },
+                                              child: const Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                size: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SeparateLine(),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text("Ganti Password",
                                                 style: poppinsNormal3),
@@ -272,30 +261,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                             ],
-                          ),
-                        )
-                      ],
+                          );
+                        }
+                        if (state is GetUserErrorState) {
+                          return const Expanded(
+                            child: Center(
+                              child: Text(
+                                "Sepertinya ada yang salah :(",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 30,
+                                    fontFamily: "Poppins"),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      },
                     );
-                  }
-                  if (state is GetUserErrorState) {
-                    return const Expanded(
-                      child: Center(
-                        child: Text(
-                          "Sepertinya ada yang salah :(",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 30,
-                              fontFamily: "Poppins"),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                },
-              );
-            },
-          ),
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
