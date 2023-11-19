@@ -31,7 +31,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late TextEditingController phoneController;
   late TextEditingController addressController;
 
-
   patchUser() {
     _userBloc = context.read<UserInfoBloc>();
     _userBloc.add(UpdateUserInfoEvent(userModel.id!, emailController.text,
@@ -107,8 +106,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               const Text("Email", style: poppinsNormal3),
                               TextFormField(
                                 controller: emailController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) => EmailValidator.validate(
                                         emailController.text)
@@ -124,8 +121,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               const Text("No. Telepon", style: poppinsNormal3),
                               TextFormField(
                                 controller: phoneController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.phone,
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
@@ -134,7 +129,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 validator: (value) {
                                   if (value == '') {
                                     return 'No. Telepon tidak boleh kosong';
-                                  } else {
+                                  } else if (value!.length < 10 ) {
+                                    return 'No. Telepon harap diisi dengan benar';
+                                  }  else {
                                     return null;
                                   }
                                 },
@@ -147,14 +144,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               const Text("Alamat", style: poppinsNormal3),
                               TextFormField(
                                 controller: addressController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
                                 keyboardType: TextInputType.multiline,
                                 maxLines: null,
                                 validator: (value) {
                                   if (value == '') {
                                     return 'Alamat tidak boleh kosong';
-                                  } else {
+                                  } else if (value!.length <= 15) {
+                                    return 'Alamat harap diisi dengan lengkap';
+                                  }else {
                                     return null;
                                   }
                                 },
