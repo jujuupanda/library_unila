@@ -1,4 +1,4 @@
-part of 'history_repository.dart';
+part of 'circulation_repository.dart';
 
 class GetHistoryClass {
   getHistory(String npm) async {
@@ -31,6 +31,24 @@ class GetHistoryClass {
       } else {
         List<HistoryModel> listHistory = [];
         return listHistory;
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  getAccount(String npm) async {
+    final url = Uri.parse('http://172.16.1.47:4000/circulation/getCirculation/account');
+    try {
+      final response = await http.post(url, body: {"npm": npm});
+      if (response.statusCode == 200) {
+        List<dynamic> dynamicResponse = jsonDecode(response.body)['data'];
+        final listAccount =
+        dynamicResponse.map((e) => AccountCirculationModel.fromJson(e)).toList();
+        return listAccount;
+      } else {
+        List<AccountCirculationModel> listAccount = [];
+        return listAccount;
       }
     } catch (error) {
       throw Exception(error);

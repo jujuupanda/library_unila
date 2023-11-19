@@ -54,236 +54,247 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is SignOutSuccessState) {
-          context.goNamed(Routes.signIn);
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        return await Future.delayed(const Duration(seconds: 1), () {
+          _getUser(tokenUser);
+        });
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            if (state is AuthLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return BlocBuilder<UserBloc, UserState>(
-              builder: (context, state) {
-                if (state is UserLoadingState) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state is GetUserSuccessState) {
-                  return Column(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 120,
-                            width: MediaQuery.of(context).size.width,
-                            decoration:
-                                const BoxDecoration(color: colorPrimary),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 16),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          "PERPUSTAKAAN",
-                                          style: headerHome1,
-                                        ),
-                                        Text(
-                                          "UNIVERSITAS LAMPUNG",
-                                          style: headerHome2,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: colorBlueAnotherOpacity,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        splashColor: colorPrimaryOpacity,
-                                        borderRadius: BorderRadius.circular(30),
-                                        onTap: () {
-                                          context.pushNamed(Routes.edit,
-                                              extra: state.userModel);
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(6),
-                                          child: Icon(
-                                            Icons.edit,
-                                            size: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: colorBlueAnotherOpacity,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        splashColor: colorPrimaryOpacity,
-                                        borderRadius: BorderRadius.circular(30),
-                                        onTap: () {
-                                          context.pushNamed(Routes.setting);
-                                        },
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(6),
-                                          child: Icon(
-                                            Icons.settings,
-                                            size: 30,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(height: 5, color: colorTertiary),
-                          Container(height: 8, color: colorSecondary),
-                        ],
-                      ),
-                      Expanded(
-                        child: ListView(
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is SignOutSuccessState) {
+            context.goNamed(Routes.signIn);
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthLoadingState) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  if (state is UserLoadingState) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (state is GetUserSuccessState) {
+                    return Column(
+                      children: [
+                        Column(
                           children: [
-                            Column(
-                              children: [
-                                const SizedBox(height: 40),
-                                const Center(
-                                  child: ProfilePictures(),
-                                ),
-                                const SizedBox(height: 16),
-                                Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    children: [
-                                      ProfileInformation(
-                                        nameInformation: "Nama",
-                                        information:
-                                            state.userModel.fName == null
-                                                ? ""
-                                                : state.userModel.fName!,
-                                      ),
-                                      const SeparateLine(),
-                                      ProfileInformation(
-                                        nameInformation: "NPM",
-                                        information: state.userModel.id == null
-                                            ? ""
-                                            : state.userModel.id!,
-                                      ),
-                                      const SeparateLine(),
-                                      ProfileInformation(
-                                        nameInformation: "Email",
-                                        information:
-                                            state.userModel.eMail == null
-                                                ? ""
-                                                : state.userModel.eMail!,
-                                      ),
-                                      const SeparateLine(),
-                                      ProfileInformation(
-                                        nameInformation: "No. Telepon",
-                                        information:
-                                            state.userModel.phone == null
-                                                ? ""
-                                                : state.userModel.phone!,
-                                      ),
-                                      const SeparateLine(),
-                                      ProfileInformation(
-                                        nameInformation: "Alamat",
-                                        information:
-                                            state.userModel.addr == null
-                                                ? ""
-                                                : state.userModel.addr!,
-                                      ),
-                                      const SeparateLine(),
-                                      Row(
+                            Container(
+                              height: 120,
+                              width: MediaQuery.of(context).size.width,
+                              decoration:
+                                  const BoxDecoration(color: colorPrimary),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 16),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text("Ganti Password",
-                                              style: poppinsNormal3),
-                                          InkWell(
-                                            onTap: () {
-                                              context.pushNamed(
-                                                  Routes.changePassword,
-                                                  extra: state.userModel);
-                                            },
-                                            child: const Icon(
-                                              Icons.arrow_forward_ios_rounded,
-                                              size: 16,
-                                            ),
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            "PERPUSTAKAAN",
+                                            style: headerHome1,
+                                          ),
+                                          Text(
+                                            "UNIVERSITAS LAMPUNG",
+                                            style: headerHome2,
                                           ),
                                         ],
                                       ),
-                                      const SeparateLine(),
-                                      const SizedBox(height: 20),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Center(
-                              child: SizedBox(
-                                width: 150,
-                                height: 40,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // _getToken();
-                                    _signOut();
-                                    // context.goNamed(Routes.signIn);
-                                  },
-                                  child: const Text("Keluar",
-                                      style: TextStyle(
-                                          fontFamily: "Poppins",
-                                          fontSize: 18,
-                                          color: Colors.white)),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: colorBlueAnotherOpacity,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          splashColor: colorPrimaryOpacity,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
+                                            context.pushNamed(Routes.edit,
+                                                extra: state.userModel);
+                                          },
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(6),
+                                            child: Icon(
+                                              Icons.edit,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: colorBlueAnotherOpacity,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          splashColor: colorPrimaryOpacity,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          onTap: () {
+                                            context.pushNamed(Routes.setting);
+                                          },
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(6),
+                                            child: Icon(
+                                              Icons.settings,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
+                            Container(height: 5, color: colorTertiary),
+                            Container(height: 8, color: colorSecondary),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                }
-                if (state is GetUserErrorState) {
-                  return const Expanded(
-                    child: Center(
-                      child: Text(
-                        "Sepertinya ada yang salah :(",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 30,
-                            fontFamily: "Poppins"),
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              Column(
+                                children: [
+                                  const SizedBox(height: 40),
+                                  const Center(
+                                    child: ProfilePictures(),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        ProfileInformation(
+                                          nameInformation: "Nama",
+                                          information:
+                                              state.userModel.fName == null
+                                                  ? ""
+                                                  : state.userModel.fName!,
+                                        ),
+                                        const SeparateLine(),
+                                        ProfileInformation(
+                                          nameInformation: "NPM",
+                                          information:
+                                              state.userModel.id == null
+                                                  ? ""
+                                                  : state.userModel.id!,
+                                        ),
+                                        const SeparateLine(),
+                                        ProfileInformation(
+                                          nameInformation: "Email",
+                                          information:
+                                              state.userModel.eMail == null
+                                                  ? ""
+                                                  : state.userModel.eMail!,
+                                        ),
+                                        const SeparateLine(),
+                                        ProfileInformation(
+                                          nameInformation: "No. Telepon",
+                                          information:
+                                              state.userModel.phone == null
+                                                  ? ""
+                                                  : state.userModel.phone!,
+                                        ),
+                                        const SeparateLine(),
+                                        ProfileInformation(
+                                          nameInformation: "Alamat",
+                                          information:
+                                              state.userModel.addr == null
+                                                  ? ""
+                                                  : state.userModel.addr!,
+                                        ),
+                                        const SeparateLine(),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text("Ganti Password",
+                                                style: poppinsNormal3),
+                                            InkWell(
+                                              onTap: () {
+                                                context.pushNamed(
+                                                    Routes.changePassword,
+                                                    extra: state.userModel);
+                                              },
+                                              child: const Icon(
+                                                Icons.arrow_forward_ios_rounded,
+                                                size: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SeparateLine(),
+                                        const SizedBox(height: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Center(
+                                child: SizedBox(
+                                  width: 150,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // _getToken();
+                                      _signOut();
+                                      // context.goNamed(Routes.signIn);
+                                    },
+                                    child: const Text("Keluar",
+                                        style: TextStyle(
+                                            fontFamily: "Poppins",
+                                            fontSize: 18,
+                                            color: Colors.white)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  if (state is GetUserErrorState) {
+                    return const Expanded(
+                      child: Center(
+                        child: Text(
+                          "Sepertinya ada yang salah :(",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 30,
+                              fontFamily: "Poppins"),
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            );
-          },
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              );
+            },
+          ),
         ),
       ),
     );
