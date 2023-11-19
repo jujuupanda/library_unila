@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../models/history_model.dart';
-import '../../../repositories/circulation_repositories/history_repository.dart';
+import '../../../repositories/circulation_repositories/circulation_repository.dart';
 
 part 'status_event.dart';
 part 'status_state.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_unila/app.dart';
 import 'package:library_unila/src/data/blocs/auth/auth_bloc.dart';
+import 'package:library_unila/src/data/blocs/circulation/account/account_bloc.dart';
 import 'package:library_unila/src/data/blocs/circulation/history/history_bloc.dart';
 import 'package:library_unila/src/data/blocs/circulation/status/status_bloc.dart';
 import 'package:library_unila/src/data/blocs/opac/author/author_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:library_unila/src/data/blocs/update/password/password_bloc.dart'
 import 'package:library_unila/src/data/blocs/update/user_information/user_info_bloc.dart';
 import 'package:library_unila/src/data/blocs/user/user_bloc.dart';
 import 'package:library_unila/src/data/repositories/auth_repository/auth_repository.dart';
-import 'package:library_unila/src/data/repositories/circulation_repositories/history_repository.dart';
+import 'package:library_unila/src/data/repositories/circulation_repositories/circulation_repository.dart';
 import 'package:library_unila/src/data/repositories/opac_repositories/opac_repository.dart';
 import 'package:library_unila/src/data/repositories/user_repository/user_repository.dart';
 
@@ -63,10 +64,16 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthorBloc(repository: OpacRepository()),
           ),
           BlocProvider(
-            create: (context) => HistoryBloc(repository: CirculationRepository()),
+            create: (context) =>
+                HistoryBloc(repository: CirculationRepository()),
           ),
           BlocProvider(
-            create: (context) => StatusBloc(repository: CirculationRepository()),
+            create: (context) =>
+                StatusBloc(repository: CirculationRepository()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                AccountBloc(repository: CirculationRepository()),
           ),
         ], child: const Apps()));
   }
