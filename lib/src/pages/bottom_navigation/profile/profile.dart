@@ -151,7 +151,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           borderRadius:
                                               BorderRadius.circular(30),
                                           onTap: () {
-                                            context.pushNamed(Routes.setting);
+                                            showSnackBar(context);
+                                            // context.pushNamed(Routes.setting);
                                           },
                                           child: const Padding(
                                             padding: EdgeInsets.all(6),
@@ -299,4 +300,19 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+void showSnackBar(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Fitur sedang dalam pengembangan'),
+      duration: Duration(seconds: 1),
+      // action: SnackBarAction(
+      //   label: 'Undo',
+      //   onPressed: () {
+      //     // Add your action here
+      //   },
+      // ),
+    ),
+  );
 }

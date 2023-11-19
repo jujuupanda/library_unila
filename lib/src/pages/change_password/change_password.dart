@@ -77,8 +77,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Password Lama",
-                                style: poppinsNormal3),
+                            const Text("Password Lama", style: poppinsNormal3),
                             TextFormField(
                               controller: oldPwd,
                               obscureText: true,
@@ -93,14 +92,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                   return null;
                                 }
                               },
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 prefixIcon: Icon(Icons.lock),
                               ),
                             ),
                             const SizedBox(height: 16),
-                            const Text("Password Baru",
-                                style: poppinsNormal3),
+                            const Text("Password Baru", style: poppinsNormal3),
                             TextFormField(
                               controller: newPwd,
                               obscureText: true,
