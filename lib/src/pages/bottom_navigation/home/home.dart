@@ -8,8 +8,10 @@ import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/blocs/circulation/account/account_bloc.dart';
 import '../../../data/blocs/circulation/status/status_bloc.dart';
 import '../../../data/blocs/user/user_bloc.dart';
+import '../../../data/models/account_circulation_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   late String tokenUser;
   late UserBloc _userBloc;
   late StatusBloc _statusBloc;
+  late AccountBloc _accountBloc;
+
   NumberFormat currencyFormatter = NumberFormat.currency(
     locale: 'id',
     symbol: 'Rp ',
@@ -34,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     final token = prefs.getString("token");
     if (token != null) {
       _getUser(token);
-      // tokenUser = token;
+      tokenUser = token;
       // print("home page token $token");
       return token;
     } else {
@@ -53,6 +57,22 @@ class _HomePageState extends State<HomePage> {
     _statusBloc.add(GetStatusEvent(npm));
   }
 
+  _getAccount(String npm) {
+    _accountBloc = context.read<AccountBloc>();
+    _accountBloc.add(GetAccountCirculationEvent(npm));
+  }
+
+  _fineAmount(List<AccountCirculationModel> listAccount) {
+    late int total = 0;
+    listAccount.forEach((element) {
+      total += element.fineAmnt!;
+    });
+    listAccount.forEach((element) {
+      total -= element.paidAmnt!;
+    });
+    return total;
+  }
+
   @override
   void initState() {
     _getToken();
@@ -62,146 +82,168 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocListener<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state is GetUserSuccessState) {
-            if (state.userModel.eMail == "" ||
-                state.userModel.eMail == "-" ||
-                state.userModel.phone == "" ||
-                state.userModel.phone == "-" ||
-                state.userModel.addr == "" ||
-                state.userModel.addr == "-") {
-              context.goNamed(Routes.edit, extra: state.userModel);
-            }
-          }
+      body: RefreshIndicator(
+        onRefresh: () async {
+          return await Future.delayed(const Duration(seconds: 1), () {
+            _getUser(tokenUser);
+            _getAccount(tokenUser);
+            _getStatus(tokenUser);
+          });
         },
-        child: BlocBuilder<UserBloc, UserState>(
-          builder: (context, state) {
-            if (state is UserLoadingState) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        child: BlocListener<UserBloc, UserState>(
+          listener: (context, state) {
             if (state is GetUserSuccessState) {
-              _getStatus(state.userModel.id!);
-              return Column(
-                children: [
-                  const HeaderHome(),
-                  Expanded(
-                    child: ListView(
-                      children: [
-                        const SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            children: [
-                              BlocBuilder<StatusBloc, StatusState>(
-                                builder: (context, state) {
-                                  if (state is GetStatusSuccessState) {
+              if (state.userModel.eMail == "" ||
+                  state.userModel.eMail == "-" ||
+                  state.userModel.phone == "" ||
+                  state.userModel.phone == "-" ||
+                  state.userModel.addr == "" ||
+                  state.userModel.addr == "-") {
+                context.goNamed(Routes.edit, extra: state.userModel);
+              }
+            }
+          },
+          child: BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state is UserLoadingState) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state is GetUserSuccessState) {
+                _getStatus(state.userModel.id!);
+                _getAccount(state.userModel.id!);
+                return Column(
+                  children: [
+                    const HeaderHome(),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              children: [
+                                BlocBuilder<StatusBloc, StatusState>(
+                                  builder: (context, state) {
+                                    if (state is GetStatusSuccessState) {
+                                      return StatusMenuHome(
+                                          colorPrimary: Colors.green,
+                                          colorSecondary: Colors.greenAccent,
+                                          nameStatusMenuHome:
+                                              "Peminjaman Yang Sedang Dilakukan:",
+                                          valueStatusMenuHome:
+                                              "${state.listStatus.length} Buku");
+                                    }
                                     return StatusMenuHome(
                                         colorPrimary: Colors.green,
                                         colorSecondary: Colors.greenAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Sedang Dilakukan:",
-                                        valueStatusMenuHome:
-                                            "${state.listStatus.length} Buku");
-                                  }
-                                  return StatusMenuHome(
-                                      colorPrimary: Colors.green,
-                                      colorSecondary: Colors.greenAccent,
-                                      nameStatusMenuHome:
-                                          "Peminjaman Yang Sedang Dilakukan:",
-                                      valueStatusMenuHome: "0 Buku");
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              BlocBuilder<StatusBloc, StatusState>(
-                                builder: (context, state) {
-                                  if (state is GetStatusSuccessState) {
+                                        valueStatusMenuHome: "0 Buku");
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                BlocBuilder<StatusBloc, StatusState>(
+                                  builder: (context, state) {
+                                    if (state is GetStatusSuccessState) {
+                                      return StatusMenuHome(
+                                          colorPrimary: Colors.yellow,
+                                          colorSecondary: Colors.yellowAccent,
+                                          nameStatusMenuHome:
+                                              "Peminjaman Yang Melewati Batas Waktu:",
+                                          valueStatusMenuHome:
+                                              "${state.listStatus.where((element) => DateTime.now().isAfter(DateTime.parse(element.dueDate!))).length} Buku");
+                                    }
                                     return StatusMenuHome(
                                         colorPrimary: Colors.yellow,
                                         colorSecondary: Colors.yellowAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Melewati Batas Waktu:",
-                                        valueStatusMenuHome:
-                                            "${state.listStatus.where((element) => DateTime.now().isAfter(DateTime.parse(element.dueDate!))).length} Buku");
-                                  }
-                                  return StatusMenuHome(
-                                      colorPrimary: Colors.yellow,
-                                      colorSecondary: Colors.yellowAccent,
-                                      nameStatusMenuHome:
-                                          "Peminjaman Yang Melewati Batas Waktu:",
-                                      valueStatusMenuHome: "0 Buku");
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              StatusMenuHome(
-                                  colorPrimary: Colors.red,
-                                  colorSecondary: Colors.redAccent,
-                                  nameStatusMenuHome: "Denda:",
-                                  valueStatusMenuHome: "0"),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MenuHome(
-                                      menuImage: imageBarcode,
-                                      menuName: "Barcode KTM",
-                                      function: () {
-                                        context.pushNamed(Routes.barcodeKTM,
-                                            extra: state.userModel);
-                                      }),
-                                  MenuHome(
-                                      menuImage: imageStatus,
-                                      menuName: "Status Pinjam",
-                                      function: () {
-                                        context.pushNamed(Routes.status,
-                                            extra: state.userModel);
-                                      }),
-                                  MenuHome(
-                                      menuImage: imageHistory,
-                                      menuName: "History Pinjam",
-                                      function: () {
-                                        context.pushNamed(Routes.history,
-                                            extra: state.userModel);
-                                      })
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  MenuHome(
-                                      menuImage: imageChecklist,
-                                      menuName: "Lengkapi Akun",
-                                      function: () {
-                                        context.pushNamed(Routes.edit,
-                                            extra: state.userModel);
-                                      }),
-                                  MenuHome(
-                                      menuImage: imageHelp,
-                                      menuName: "Bantuan",
-                                      function: () {
-                                        context.pushNamed(Routes.help);
-                                      }),
-                                  const SizedBox(height: 90, width: 90),
-                                ],
-                              ),
-                            ],
+                                        valueStatusMenuHome: "0 Buku");
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                BlocBuilder<AccountBloc, AccountState>(
+                                  builder: (context, state) {
+                                    if (state is AccountCirculationSuccessState) {
+                                      final fineAmnt = _fineAmount(state.listAccount);
+
+                                      return StatusMenuHome(
+                                          colorPrimary: Colors.red,
+                                          colorSecondary: Colors.redAccent,
+                                          nameStatusMenuHome: "Denda:",
+                                          valueStatusMenuHome: currencyFormatter.format(fineAmnt));
+                                    }
+                                    return StatusMenuHome(
+                                        colorPrimary: Colors.red,
+                                        colorSecondary: Colors.redAccent,
+                                        nameStatusMenuHome: "Denda:",
+                                        valueStatusMenuHome: currencyFormatter.format(0));
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    MenuHome(
+                                        menuImage: imageBarcode,
+                                        menuName: "Barcode KTM",
+                                        function: () {
+                                          context.pushNamed(Routes.barcodeKTM,
+                                              extra: state.userModel);
+                                        }),
+                                    MenuHome(
+                                        menuImage: imageStatus,
+                                        menuName: "Status Pinjam",
+                                        function: () {
+                                          context.pushNamed(Routes.status,
+                                              extra: state.userModel);
+                                        }),
+                                    MenuHome(
+                                        menuImage: imageHistory,
+                                        menuName: "History Pinjam",
+                                        function: () {
+                                          context.pushNamed(Routes.history,
+                                              extra: state.userModel);
+                                        })
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    MenuHome(
+                                        menuImage: imageChecklist,
+                                        menuName: "Lengkapi Akun",
+                                        function: () {
+                                          context.pushNamed(Routes.edit,
+                                              extra: state.userModel);
+                                        }),
+                                    MenuHome(
+                                        menuImage: imageHelp,
+                                        menuName: "Bantuan",
+                                        function: () {
+                                          context.pushNamed(Routes.help);
+                                        }),
+                                    const SizedBox(height: 90, width: 90),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
       ),
     );

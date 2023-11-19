@@ -1,4 +1,4 @@
-part of 'history_repository.dart';
+part of 'circulation_repository.dart';
 
 class PostHistoryClass {
   postHistory() {}
