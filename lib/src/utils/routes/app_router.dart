@@ -17,6 +17,7 @@ import '../../data/models/book_model.dart';
 import '../../data/models/history_model.dart';
 import '../../data/models/user_model.dart';
 import '../../pages/bottom_navigation/home/home.dart';
+import '../../pages/circulation_account/circulation_account.dart';
 import '../../pages/detail_history/detail_history.dart';
 import '../../pages/detail_status_overdue/detail_status_overdue.dart';
 import '../../pages/splash/splash.dart';
@@ -130,6 +131,15 @@ class AppRouter {
                             },
                           )
                         ]),
+                    GoRoute(
+                      path: 'circulationAccount',
+                      name: Routes.circulationAccount,
+                      builder: (context, state) {
+                        return CirculationAccountPage(
+                          npm: state.extra as String,
+                        );
+                      },
+                    ),
                     GoRoute(
                       path: 'help',
                       name: Routes.help,
