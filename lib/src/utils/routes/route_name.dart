@@ -18,5 +18,7 @@ abstract class Routes {
   static const detailBook = "detailBook";
   static const detailHistory = "detailHistory";
   static const detailStatus = "detailStatus";
+  static const statusOverdue = "statusOverdue";
+  static const detailStatusOverdue = "detailStatusOverdue";
 
 }

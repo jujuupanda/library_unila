@@ -18,7 +18,9 @@ import '../../data/models/history_model.dart';
 import '../../data/models/user_model.dart';
 import '../../pages/bottom_navigation/home/home.dart';
 import '../../pages/detail_history/detail_history.dart';
+import '../../pages/detail_status_overdue/detail_status_overdue.dart';
 import '../../pages/splash/splash.dart';
+import '../../pages/status_overdue/status_overdue.dart';
 export 'package:go_router/go_router.dart';
 
 part 'route_name.dart';
@@ -76,7 +78,7 @@ class AppRouter {
                         name: Routes.status,
                         builder: (context, state) {
                           return StatusPage(
-                            userModel: state.extra as UserModel,
+                            npm: state.extra as String,
                           );
                         },
                         routes: [
@@ -91,11 +93,30 @@ class AppRouter {
                           )
                         ]),
                     GoRoute(
+                        path: 'statusOverdue',
+                        name: Routes.statusOverdue,
+                        builder: (context, state) {
+                          return StatusOverduePage(
+                            npm: state.extra as String,
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: 'detailStatusOverdue',
+                            name: Routes.detailStatusOverdue,
+                            builder: (context, state) {
+                              return DetailStatusOverduePage(
+                                status: state.extra as HistoryModel,
+                              );
+                            },
+                          )
+                        ]),
+                    GoRoute(
                         path: 'history',
                         name: Routes.history,
                         builder: (context, state) {
                           return HistoryPage(
-                            userModel: state.extra as UserModel,
+                            npm: state.extra as String,
                           );
                         },
                         routes: [

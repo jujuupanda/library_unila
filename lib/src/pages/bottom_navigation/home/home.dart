@@ -117,8 +117,9 @@ class _HomePageState extends State<HomePage> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is GetUserSuccessState) {
-                      _getStatus(state.userModel.id!);
-                      _getAccount(state.userModel.id!);
+                      final npm = state.userModel.id!;
+                      _getStatus(npm);
+                      _getAccount(npm);
                       return ListView(
                         children: [
                           const SizedBox(height: 20),
@@ -205,14 +206,14 @@ class _HomePageState extends State<HomePage> {
                                         menuName: "Status Pinjam",
                                         function: () {
                                           context.pushNamed(Routes.status,
-                                              extra: state.userModel);
+                                              extra: npm);
                                         }),
                                     MenuHome(
                                         menuImage: imageHistory,
                                         menuName: "History Pinjam",
                                         function: () {
                                           context.pushNamed(Routes.history,
-                                              extra: state.userModel);
+                                              extra: npm);
                                         })
                                   ],
                                 ),
