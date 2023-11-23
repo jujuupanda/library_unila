@@ -55,7 +55,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return BlocListener<UserInfoBloc, UserInfoState>(
       listener: (context, state) {
         if (state is UpdateUserInfoSuccessState) {
-          context.pop();
+          context.goNamed(Routes.home);
         }
       },
       child: Scaffold(

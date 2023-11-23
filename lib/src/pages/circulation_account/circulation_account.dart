@@ -2,58 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:library_unila/src/data/models/account_circulation_model.dart';
 import 'package:library_unila/src/pages/utils/header_page.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 
-import '../../data/blocs/circulation/history/history_bloc.dart';
-import '../../data/models/history_model.dart';
-import '../../data/models/user_model.dart';
+import '../../data/blocs/circulation/account/account_bloc.dart';
 import '../utils/borrow_card.dart';
 
-class HistoryPage extends StatefulWidget {
+class CirculationAccountPage extends StatefulWidget {
   final String npm;
-  const HistoryPage({Key? key, required this.npm}) : super(key: key);
+
+  const CirculationAccountPage({Key? key, required this.npm}) : super(key: key);
 
   @override
-  State<HistoryPage> createState() => _HistoryPageState();
+  State<CirculationAccountPage> createState() => _CirculationAccountPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage> {
-  late HistoryBloc historyBloc;
+class _CirculationAccountPageState extends State<CirculationAccountPage> {
+  late AccountBloc _accountBloc;
 
-  _getHistory(String npm) {
-    historyBloc = context.read<HistoryBloc>();
-    historyBloc.add(GetHistoryEvent(npm));
+  _getAccount(String npm) {
+    _accountBloc = context.read<AccountBloc>();
+    _accountBloc.add(GetAccountCirculationEvent(npm));
   }
 
   @override
   void initState() {
-    _getHistory(widget.npm);
+    _getAccount(widget.npm);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final parsingBook = _ParsingBook();
-    
+
     return Scaffold(
-      body: BlocBuilder<HistoryBloc, HistoryState>(
+      body: BlocBuilder<AccountBloc, AccountState>(
         builder: (context, state) {
-          if (state is GetHistorySuccessState) {
+          if (state is AccountCirculationSuccessState) {
             return Column(
               children: [
                 HeaderAllPage(
-                    headerName: "History Peminjaman",
+                    headerName: "Denda Peminjaman",
                     function: () {
                       context.pop();
                     }),
-                if (state.listHistory.isNotEmpty)
+                if (state.listAccount.isNotEmpty)
                   Expanded(
-                    child: GroupedListView<HistoryModel, String>(
+                    child: GroupedListView<AccountCirculationModel, String>(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
-                      elements: state.listHistory,
+                      elements: state.listAccount,
                       groupBy: (element) => element.chkODate!,
                       order: GroupedListOrder.DESC,
                       groupSeparatorBuilder: (String groupByValue) {
@@ -61,7 +61,8 @@ class _HistoryPageState extends State<HistoryPage> {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Column(
                             children: [
-                              Text(parsingBook.convertMonth(groupByValue),
+                              Text(
+                                parsingBook.convertMonth(groupByValue),
                                 style: const TextStyle(
                                   fontFamily: "Poppins",
                                   fontSize: 20,
@@ -82,15 +83,14 @@ class _HistoryPageState extends State<HistoryPage> {
                         return Column(
                           children: [
                             BorrowCard(
-                                title: element.cItem!.eTitBib!.eTit!.titKey!,
-                                noCall: "${element.cItem!.eBib!.calKey!} ${element.cItem!.copyNo.toString()}",
-                                borrowDate: element.chkODate != null ? element.chkODate.toString() : "",
-                                dueDate: element.dueDate != null ? element.dueDate.toString() : "",
-                                returnDate: element.chkIDate != null ? element.chkIDate.toString() : "",
-                                function: () {
-                                  context.pushNamed(Routes.detailHistory,
-                                      extra: element);
-                                }),
+                              title: element.cItem!.eTitBib!.eTit!.titKey!,
+                              noCall:
+                                  "${element.cItem!.eBib!.calKey!} ${element.cItem!.copyNo.toString()}",
+                              borrowDate: element.chkODate != null
+                                  ? element.chkODate.toString()
+                                  : "",
+                              fineAmnt: element.fineAmnt,
+                            ),
                             const SizedBox(height: 16)
                           ],
                         );
@@ -103,7 +103,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       padding: EdgeInsets.all(8),
                       child: Center(
                         child: Text(
-                          "Anda tidak memiliki riwayat peminjaman buku",
+                          "Anda tidak memiliki peminjaman yang dikenakan denda",
                           style: poppinsBig,
                           textAlign: TextAlign.center,
                         ),
@@ -126,11 +126,14 @@ class _ParsingBook {
   parsingTitle(String title) {
     return title == "" || title == "-" ? "" : title.toTitleCase();
   }
+
   String convertMonth(String input) {
-    final parsedEnglish = DateFormat('dd MMMM yyyy').format(DateTime.parse(input));
+    final parsedEnglish =
+        DateFormat('dd MMMM yyyy').format(DateTime.parse(input));
     return parsedEnglish.replaceAllMapped(
-      RegExp(r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\b'),
-          (Match match) {
+      RegExp(
+          r'\b(January|February|March|April|May|June|July|August|September|October|November|December)\b'),
+      (Match match) {
         switch (match.group(0)) {
           case 'January':
             return 'Januari';
@@ -162,5 +165,4 @@ class _ParsingBook {
       },
     );
   }
-
 }

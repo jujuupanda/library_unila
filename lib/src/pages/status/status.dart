@@ -13,9 +13,9 @@ import '../../data/models/user_model.dart';
 import '../utils/borrow_card.dart';
 
 class StatusPage extends StatefulWidget {
-  final UserModel userModel;
+  final String npm;
 
-  const StatusPage({Key? key, required this.userModel}) : super(key: key);
+  const StatusPage({Key? key, required this.npm}) : super(key: key);
 
   @override
   State<StatusPage> createState() => _StatusPageState();
@@ -31,7 +31,7 @@ class _StatusPageState extends State<StatusPage> {
 
   @override
   void initState() {
-    _getStatus(widget.userModel.id!);
+    _getStatus(widget.npm);
     super.initState();
   }
 
