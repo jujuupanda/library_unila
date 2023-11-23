@@ -117,8 +117,9 @@ class _HomePageState extends State<HomePage> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (state is GetUserSuccessState) {
-                      _getStatus(state.userModel.id!);
-                      _getAccount(state.userModel.id!);
+                      final npm = state.userModel.id!;
+                      _getStatus(npm);
+                      _getAccount(npm);
                       return ListView(
                         children: [
                           const SizedBox(height: 20),
@@ -130,19 +131,31 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context, state) {
                                     if (state is GetStatusSuccessState) {
                                       return StatusMenuHome(
-                                          colorPrimary: Colors.green,
-                                          colorSecondary: Colors.greenAccent,
-                                          nameStatusMenuHome:
-                                              "Peminjaman Yang Sedang Dilakukan:",
-                                          valueStatusMenuHome:
-                                              "${state.listStatus.length} Buku");
-                                    }
-                                    return StatusMenuHome(
                                         colorPrimary: Colors.green,
                                         colorSecondary: Colors.greenAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Sedang Dilakukan:",
-                                        valueStatusMenuHome: "0 Buku");
+                                        valueStatusMenuHome:
+                                            "${state.listStatus.length} Buku",
+                                        function: () {
+                                          context.pushNamed(Routes.status,
+                                            extra: npm,
+                                          );
+                                        },
+                                      );
+                                    }
+                                    return StatusMenuHome(
+                                      colorPrimary: Colors.green,
+                                      colorSecondary: Colors.greenAccent,
+                                      nameStatusMenuHome:
+                                          "Peminjaman Yang Sedang Dilakukan:",
+                                      valueStatusMenuHome: "0 Buku",
+                                      function: () {
+                                        context.pushNamed(Routes.status,
+                                          extra: npm,
+                                        );
+                                      },
+                                    );
                                   },
                                 ),
                                 const SizedBox(height: 10),
@@ -150,19 +163,33 @@ class _HomePageState extends State<HomePage> {
                                   builder: (context, state) {
                                     if (state is GetStatusSuccessState) {
                                       return StatusMenuHome(
-                                          colorPrimary: Colors.yellow,
-                                          colorSecondary: Colors.yellowAccent,
-                                          nameStatusMenuHome:
-                                              "Peminjaman Yang Melewati Batas Waktu:",
-                                          valueStatusMenuHome:
-                                              "${state.listStatus.where((element) => DateTime.now().isAfter(DateTime.parse(element.dueDate!))).length} Buku");
-                                    }
-                                    return StatusMenuHome(
                                         colorPrimary: Colors.yellow,
                                         colorSecondary: Colors.yellowAccent,
                                         nameStatusMenuHome:
                                             "Peminjaman Yang Melewati Batas Waktu:",
-                                        valueStatusMenuHome: "0 Buku");
+                                        valueStatusMenuHome:
+                                            "${state.listStatus.where((element) => DateTime.now().isAfter(DateTime.parse(element.dueDate!))).length} Buku",
+                                        function: () {
+                                          context.pushNamed(
+                                            Routes.statusOverdue,
+                                            extra: npm,
+                                          );
+                                        },
+                                      );
+                                    }
+                                    return StatusMenuHome(
+                                      colorPrimary: Colors.yellow,
+                                      colorSecondary: Colors.yellowAccent,
+                                      nameStatusMenuHome:
+                                          "Peminjaman Yang Melewati Batas Waktu:",
+                                      valueStatusMenuHome: "0 Buku",
+                                      function: () {
+                                        context.pushNamed(
+                                          Routes.statusOverdue,
+                                          extra: npm,
+                                        );
+                                      },
+                                    );
                                   },
                                 ),
                                 const SizedBox(height: 10),
@@ -174,18 +201,32 @@ class _HomePageState extends State<HomePage> {
                                           _fineAmount(state.listAccount);
 
                                       return StatusMenuHome(
-                                          colorPrimary: Colors.red,
-                                          colorSecondary: Colors.redAccent,
-                                          nameStatusMenuHome: "Denda:",
-                                          valueStatusMenuHome: currencyFormatter
-                                              .format(fineAmnt));
-                                    }
-                                    return StatusMenuHome(
                                         colorPrimary: Colors.red,
                                         colorSecondary: Colors.redAccent,
                                         nameStatusMenuHome: "Denda:",
                                         valueStatusMenuHome:
-                                            currencyFormatter.format(0));
+                                            currencyFormatter.format(fineAmnt),
+                                        function: () {
+                                          context.pushNamed(
+                                            Routes.circulationAccount,
+                                            extra: npm,
+                                          );
+                                        },
+                                      );
+                                    }
+                                    return StatusMenuHome(
+                                      colorPrimary: Colors.red,
+                                      colorSecondary: Colors.redAccent,
+                                      nameStatusMenuHome: "Denda:",
+                                      valueStatusMenuHome:
+                                          currencyFormatter.format(0),
+                                      function: () {
+                                        context.pushNamed(
+                                          Routes.circulationAccount,
+                                          extra: npm,
+                                        );
+                                      },
+                                    );
                                   },
                                 ),
                                 const SizedBox(height: 20),
@@ -205,14 +246,14 @@ class _HomePageState extends State<HomePage> {
                                         menuName: "Status Pinjam",
                                         function: () {
                                           context.pushNamed(Routes.status,
-                                              extra: state.userModel);
+                                              extra: npm);
                                         }),
                                     MenuHome(
                                         menuImage: imageHistory,
                                         menuName: "History Pinjam",
                                         function: () {
                                           context.pushNamed(Routes.history,
-                                              extra: state.userModel);
+                                              extra: npm);
                                         })
                                   ],
                                 ),

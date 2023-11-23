@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 
 class StatusMenuHome extends StatefulWidget {
-  Color colorPrimary;
-  Color colorSecondary;
-  String nameStatusMenuHome;
-  String valueStatusMenuHome;
+  final Color colorPrimary;
+  final Color colorSecondary;
+  final String nameStatusMenuHome;
+  final String valueStatusMenuHome;
+  final VoidCallback function;
 
-  StatusMenuHome(
+  const StatusMenuHome(
       {Key? key,
-      required this.colorPrimary,
-      required this.colorSecondary,
-      required this.nameStatusMenuHome,
-      required this.valueStatusMenuHome})
+        required this.colorPrimary,
+        required this.colorSecondary,
+        required this.nameStatusMenuHome,
+        required this.valueStatusMenuHome,
+        required this.function})
       : super(key: key);
 
   @override
@@ -37,46 +39,54 @@ class _StatusMenuHomeState extends State<StatusMenuHome> {
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 6,
-            decoration: BoxDecoration(
-              color: widget.colorPrimary,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(5),
-                topLeft: Radius.circular(5),
-              ),
-            ),
-          ),
-          Container(
-            width: 3,
-            color: widget.colorSecondary,
-          ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.nameStatusMenuHome,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: poppinsNormal,
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      widget.valueStatusMenuHome,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: poppinsBig,
-                    ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.function,
+          splashColor: colorPrimaryOpacity,
+          borderRadius: BorderRadius.circular(5),
+          child: Row(
+            children: [
+              Container(
+                width: 6,
+                decoration: BoxDecoration(
+                  color: widget.colorPrimary,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(5),
+                    topLeft: Radius.circular(5),
                   ),
                 ),
-              ],
-            ),
-          )
-        ],
+              ),
+              Container(
+                width: 3,
+                color: widget.colorSecondary,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.nameStatusMenuHome,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: poppinsNormal,
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          widget.valueStatusMenuHome,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: poppinsBig,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
