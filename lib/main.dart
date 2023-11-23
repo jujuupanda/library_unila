@@ -15,8 +15,11 @@ import 'package:library_unila/src/data/repositories/auth_repository/auth_reposit
 import 'package:library_unila/src/data/repositories/circulation_repositories/circulation_repository.dart';
 import 'package:library_unila/src/data/repositories/opac_repositories/opac_repository.dart';
 import 'package:library_unila/src/data/repositories/user_repository/user_repository.dart';
+import 'package:library_unila/src/data/services/notification_api.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationServices.init();
   runApp(const MyApp());
 }
 
