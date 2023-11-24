@@ -2,7 +2,7 @@ part of 'opac_repository.dart';
 
 class GetOpacClass {
   getOpac(String keyword) async {
-    final url = Uri.parse('http://172.16.1.47:4000/book/getBook');
+    final url = Uri.parse('${UrlRepository().url}/book/getBook');
     try {
       final response = await http.post(url, body: {"title": keyword});
 
@@ -21,7 +21,7 @@ class GetOpacClass {
   }
 
   getItemBook(String bibId) async {
-    final url = Uri.parse('http://172.16.1.47:4000/book/getBook/itemBook');
+    final url = Uri.parse('${UrlRepository().url}/book/getBook/itemBook');
     try {
       final response = await http.post(url, body: {"bibId": bibId});
       if (response.statusCode == 200) {
@@ -39,7 +39,7 @@ class GetOpacClass {
   }
 
   getAuthorBook(String bibId) async {
-    final url = Uri.parse('http://172.16.1.47:4000/book/getBook/authorBook');
+    final url = Uri.parse('${UrlRepository().url}/book/getBook/authorBook');
     try {
       final response = await http.post(url, body: {"bibId": bibId});
       if (response.statusCode == 200) {

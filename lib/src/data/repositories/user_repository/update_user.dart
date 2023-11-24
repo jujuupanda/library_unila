@@ -9,7 +9,7 @@ class UpdateUserClass {
     String phone,
     String email,
   ) async {
-    final url = Uri.parse("http://172.16.1.47:4000/user/patchUser/$npm");
+    final url = Uri.parse("${UrlRepository().url}/user/patchUser/$npm");
     final response = await http
         .patch(url, body: {"addr": addr, "phone": phone, "email": email});
     if (response.statusCode == 200) {
@@ -26,7 +26,7 @@ class UpdateUserClass {
   ) async {
     errorMessageChangePassword = "";
     final url =
-        Uri.parse("http://172.16.1.47:4000/user/patchUser/$npm/password");
+        Uri.parse("${UrlRepository().url}/user/patchUser/$npm/password");
     final response = await http.patch(url, body: {
       "oldPwd": oldPwd,
       "newPwd": newPwd,

@@ -7,7 +7,7 @@ class AuthSignIn {
   signIn(String npm, String password) async {
     errorMessageSignIn = "";
     token = "";
-    String url = 'http://172.16.1.47:4000/auth/login';
+    String url = '${UrlRepository().url}/auth/login';
     final response = await http.post(
       Uri.parse(url),
       body: {'npm': npm, 'password': password},
@@ -18,7 +18,7 @@ class AuthSignIn {
       return token = result['token'];
     } else {
       final resultError = jsonDecode(response.body);
-      switch (resultError['message']){
+      switch (resultError['message']) {
         case "NPM not found":
           resultError['message'] = "NPM tidak ditemukan!";
           break;
