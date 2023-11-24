@@ -76,11 +76,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Expanded(
+                        const Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 "PERPUSTAKAAN",
                                 style: headerHome1,
@@ -148,7 +148,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Column(
                                 children: [
-                                  const SizedBox(height: 40),
                                   const Center(
                                     child: ProfilePictures(),
                                   ),
@@ -218,15 +217,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const SeparateLine(),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text("Ganti Password",
                                                 style: poppinsNormal3),
                                             InkWell(
                                               onTap: () {
-                                                context.pushNamed(
-                                                    Routes.changePassword,
-                                                    extra: state.userModel);
+                                                showSnackBar(context);
+                                                // context.pushNamed(
+                                                //   Routes.changePassword,
+                                                //   extra: state.userModel,
+                                                // );
                                               },
                                               child: const Icon(
                                                 Icons.arrow_forward_ios_rounded,
@@ -237,28 +238,45 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         const SeparateLine(),
                                         const SizedBox(height: 20),
+                                        Container(
+                                          width: 150,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: colorPrimary,
+                                              )),
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              onTap: () {
+                                                _signOut();
+                                              },
+                                              splashColor: colorPrimary,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: const Center(
+                                                child: Text(
+                                                  "Keluar",
+                                                  style: TextStyle(
+                                                      fontFamily: "Poppins",
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 16,
+                                                      color: colorPrimary),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+
                                       ],
                                     ),
                                   ),
                                 ],
-                              ),
-                              Center(
-                                child: SizedBox(
-                                  width: 150,
-                                  height: 40,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // _getToken();
-                                      _signOut();
-                                      // context.goNamed(Routes.signIn);
-                                    },
-                                    child: const Text("Keluar",
-                                        style: TextStyle(
-                                            fontFamily: "Poppins",
-                                            fontSize: 18,
-                                            color: Colors.white)),
-                                  ),
-                                ),
                               ),
                             ],
                           );
