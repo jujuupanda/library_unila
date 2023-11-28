@@ -7,7 +7,7 @@ import '../../data/models/user_model.dart';
 import '../utils/header_page.dart';
 
 class BarcodeKTM extends StatefulWidget {
-  UserModel userModel;
+  final UserModel userModel;
 
   BarcodeKTM({Key? key, required this.userModel}) : super(key: key);
 
@@ -44,7 +44,10 @@ class _BarcodeKTMState extends State<BarcodeKTM> {
                     const Text("Nama:", style: poppinsSemiBold),
                     SizedBox(
                       width: 200,
-                      child: Text(widget.userModel.fName ?? "",
+                      child: Text(widget.userModel.fName ==
+                          null
+                          ? ""
+                          : "${widget.userModel.fName} ${widget.userModel.lName == "-" ? "" : widget.userModel.lName}",
                           textAlign: TextAlign.end,
                           overflow: TextOverflow.fade,
                           maxLines: 1,

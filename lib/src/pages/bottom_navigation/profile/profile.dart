@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +272,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                           ),
                                         ),
                                         const SizedBox(height: 20),
-
                                       ],
                                     ),
                                   ),
