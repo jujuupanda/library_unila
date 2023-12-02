@@ -129,9 +129,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 validator: (value) {
                                   if (value == '') {
                                     return 'No. Telepon tidak boleh kosong';
-                                  } else if (value!.length < 10 ) {
+                                  } else if (value!.length < 10) {
                                     return 'No. Telepon harap diisi dengan benar';
-                                  }  else {
+                                  } else {
                                     return null;
                                   }
                                 },
@@ -151,7 +151,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     return 'Alamat tidak boleh kosong';
                                   } else if (value!.length <= 15) {
                                     return 'Alamat harap diisi dengan lengkap';
-                                  }else {
+                                  } else {
                                     return null;
                                   }
                                 },
@@ -166,8 +166,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   child: Material(
                                     child: InkWell(
                                       onTap: () {
-                                        context.pushNamed(Routes.changePassword,
-                                            extra: userModel);
+                                        showSnackBar(context);
+                                        // context.pushNamed(Routes.changePassword,
+                                        //     extra: userModel);
                                       },
                                       child: const Text(
                                         "Ganti Password",
@@ -234,4 +235,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
+}
+
+void showSnackBar(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Fitur sedang dalam pengembangan'),
+      duration: Duration(seconds: 1),
+      // action: SnackBarAction(
+      //   label: 'Undo',
+      //   onPressed: () {
+      //     // Add your action here
+      //   },
+      // ),
+    ),
+  );
 }
