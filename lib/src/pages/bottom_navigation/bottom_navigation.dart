@@ -1,9 +1,6 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:library_unila/src/pages/bottom_navigation/home/home.dart';
-import 'package:library_unila/src/pages/bottom_navigation/opac/opac.dart';
-import 'package:library_unila/src/pages/bottom_navigation/profile/profile.dart';
-
 import '../../utils/constants/constant.dart';
 
 class BotNavHome extends StatefulWidget {
@@ -62,8 +59,7 @@ class _BotNavHomeState extends State<BotNavHome> {
                       width: 100,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border:
-                              Border.all(width: 1, color: colorPrimary)),
+                          border: Border.all(width: 1, color: colorPrimary)),
                       child: const Center(
                         child: Text(
                           'Tidak',
@@ -121,31 +117,116 @@ class _BotNavHomeState extends State<BotNavHome> {
     ),
   ];
 
+  Widget loading() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "Connection Issue",
+            style: poppinsBig,
+          ),
+        ),
+      ),
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget noConnection() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "Connection Issue",
+            style: poppinsBig,
+          ),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(imageNoConn, width: 120),
+            const SizedBox(height: 10),
+            Text(
+              "No Connection Internet",
+              style: poppinsBig,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget vpnConnection() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            "Connection Issue",
+            style: poppinsBig,
+          ),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(imageWarnConn, width: 120),
+            const SizedBox(height: 10),
+            Text(
+              "VPN Connection Not Allowed",
+              style: poppinsBig,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: widget.navigationShell,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: colorPrimary,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.grey,
-          iconSize: 26,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-            _goToBranch(_currentIndex);
-          },
-          items: _bottomNavigationBarItem,
-        ),
+      child: StreamBuilder(
+        stream: Connectivity().onConnectivityChanged,
+        builder: (context, AsyncSnapshot<ConnectivityResult> snapshot) {
+          if (snapshot.hasData) {
+            ConnectivityResult? result = snapshot.data;
+            if (result == ConnectivityResult.mobile ||
+                result == ConnectivityResult.wifi) {
+              return Scaffold(
+                resizeToAvoidBottomInset: false,
+                body: SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: widget.navigationShell,
+                ),
+                bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: colorPrimary,
+                  selectedItemColor: Colors.white,
+                  unselectedItemColor: Colors.grey,
+                  iconSize: 26,
+                  currentIndex: _currentIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                    _goToBranch(_currentIndex);
+                  },
+                  items: _bottomNavigationBarItem,
+                ),
+              );
+            } else if (result == ConnectivityResult.vpn) {
+              return vpnConnection();
+            } else {
+              return noConnection();
+            }
+          } else {
+            return loading();
+          }
+        },
       ),
     );
   }

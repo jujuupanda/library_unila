@@ -12,3 +12,5 @@ const imageOpacUnila = "assets/images/opac_unila.png";
 const imageExit = "assets/images/exit.png";
 const imageBackgroundOpac = "assets/images/background_opac.jpg";
 const imageHelp = "assets/images/help.png";
+const imageNoConn = "assets/images/no_connection.png";
+const imageWarnConn = "assets/images/warning_connection.png";
