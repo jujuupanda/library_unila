@@ -4,10 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:library_unila/src/data/services/notification_api.dart';
 import 'package:library_unila/src/pages/bottom_navigation/home/home_header.dart';
 import 'package:library_unila/src/pages/utils/home_menu.dart';
+import 'package:library_unila/src/pages/utils/separated_line.dart';
 import 'package:library_unila/src/pages/utils/status_menu_home.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/blocs/circulation/account/account_bloc.dart';
 import '../../../data/blocs/circulation/status/status_bloc.dart';
@@ -26,6 +28,10 @@ class _HomePageState extends State<HomePage> {
   late UserBloc _userBloc;
   late StatusBloc _statusBloc;
   late AccountBloc _accountBloc;
+
+  final Uri _urlSimpaper = Uri.parse('https://simpaper.unila.ac.id');
+  final Uri _urlDigilib = Uri.parse('https://digilib.unila.ac.id');
+  final Uri _urlPerpus = Uri.parse('https://library.unila.ac.id');
 
   NumberFormat currencyFormatter = NumberFormat.currency(
     locale: 'id',
@@ -121,7 +127,6 @@ class _HomePageState extends State<HomePage> {
                       _getAccount(npm);
                       return ListView(
                         children: [
-                          const SizedBox(height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
@@ -137,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                                         valueStatusMenuHome:
                                             "${state.listStatus.length} Buku",
                                         function: () {
-                                          context.pushNamed(Routes.status,
+                                          context.pushNamed(
+                                            Routes.status,
                                             extra: npm,
                                           );
                                         },
@@ -150,7 +156,8 @@ class _HomePageState extends State<HomePage> {
                                           "Peminjaman Yang Sedang Dilakukan:",
                                       valueStatusMenuHome: "0 Buku",
                                       function: () {
-                                        context.pushNamed(Routes.status,
+                                        context.pushNamed(
+                                          Routes.status,
                                           extra: npm,
                                         );
                                       },
@@ -229,6 +236,9 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                                 const SizedBox(height: 20),
+                                Text("Sirkulasi", style: poppinsSemiBold),
+                                SeparateLine(),
+                                const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -291,6 +301,44 @@ class _HomePageState extends State<HomePage> {
                                     // ),
                                   ],
                                 ),
+                                const SizedBox(height: 20),
+                                Text("Lainnya", style: poppinsSemiBold),
+                                SeparateLine(),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    MenuHome(
+                                        menuImage: imageBarcode,
+                                        menuName: "SIMPAPER",
+                                        function: () async {
+                                          if (!await launchUrl(_urlSimpaper)) {
+                                            throw Exception(
+                                                'Could not launch $_urlSimpaper');
+                                          }
+                                        }),
+                                    MenuHome(
+                                        menuImage: imageStatus,
+                                        menuName: "DIGILIB",
+                                        function: () async {
+                                          if (!await launchUrl(_urlDigilib)) {
+                                            throw Exception(
+                                                'Could not launch $_urlDigilib');
+                                          }
+                                        }),
+                                    MenuHome(
+                                        menuImage: imageHistory,
+                                        menuName: "WEB PERPUS",
+                                        function: () async {
+                                          if (!await launchUrl(_urlPerpus)) {
+                                            throw Exception(
+                                                'Could not launch $_urlPerpus');
+                                          }
+                                        })
+                                  ],
+                                ),
+                                const SizedBox(height: 40),
                               ],
                             ),
                           ),

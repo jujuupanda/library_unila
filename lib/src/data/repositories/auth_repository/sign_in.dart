@@ -12,7 +12,6 @@ class AuthSignIn {
       Uri.parse(url),
       body: {'npm': npm, 'password': password},
     );
-
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       return token = result['token'];

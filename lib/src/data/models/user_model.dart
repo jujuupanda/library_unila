@@ -1,12 +1,13 @@
 class UserModel {
   UserModel({
-      this.id, 
-      this.fName, 
-      this.lName, 
-      this.addr, 
-      this.eMail, 
-      this.phone, 
-      this.pwd,});
+    this.id,
+    this.fName,
+    this.lName,
+    this.addr,
+    this.eMail,
+    this.phone,
+    this.pwd,
+  });
 
   UserModel.fromJson(dynamic json) {
     id = json['ID'];
@@ -17,6 +18,7 @@ class UserModel {
     phone = json['Phone'];
     pwd = json['Pwd'];
   }
+
   String? id;
   String? fName;
   String? lName;
@@ -36,5 +38,4 @@ class UserModel {
     map['Pwd'] = pwd;
     return map;
   }
-
 }
