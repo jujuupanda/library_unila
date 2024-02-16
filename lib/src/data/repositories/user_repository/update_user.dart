@@ -26,7 +26,7 @@ class UpdateUserClass {
   ) async {
     errorMessageChangePassword = "";
     final url =
-        Uri.parse("${UrlRepository().url}/user/patchUser/$npm/password");
+        Uri.parse("${UrlRepository().url}/user/patchUser/$npm/passwordMd5");
     final response = await http.patch(url, body: {
       "oldPwd": oldPwd,
       "newPwd": newPwd,

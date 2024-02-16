@@ -310,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     MenuHome(
-                                        menuImage: imageBarcode,
+                                        menuImage: imageWeb,
                                         menuName: "SIMPAPER",
                                         function: () async {
                                           if (!await launchUrl(_urlSimpaper)) {
@@ -319,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                                           }
                                         }),
                                     MenuHome(
-                                        menuImage: imageStatus,
+                                        menuImage: imageWeb,
                                         menuName: "DIGILIB",
                                         function: () async {
                                           if (!await launchUrl(_urlDigilib)) {
@@ -328,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                                           }
                                         }),
                                     MenuHome(
-                                        menuImage: imageHistory,
+                                        menuImage: imageWeb,
                                         menuName: "WEB PERPUS",
                                         function: () async {
                                           if (!await launchUrl(_urlPerpus)) {

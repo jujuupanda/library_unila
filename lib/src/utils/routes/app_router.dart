@@ -22,6 +22,7 @@ import '../../pages/detail_history/detail_history.dart';
 import '../../pages/detail_status_overdue/detail_status_overdue.dart';
 import '../../pages/splash/splash.dart';
 import '../../pages/status_overdue/status_overdue.dart';
+import '../../pages/webview_sso/webview_sso.dart';
 export 'package:go_router/go_router.dart';
 
 part 'route_name.dart';
@@ -225,6 +226,16 @@ class AppRouter {
         parentNavigatorKey: _rootNavigatorKeys,
         builder: (context, state) {
           return SignInPage(
+            key: state.pageKey,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/webViewSSO',
+        name: Routes.webViewSSO,
+        parentNavigatorKey: _rootNavigatorKeys,
+        builder: (context, state) {
+          return WebViewSSOPage(
             key: state.pageKey,
           );
         },
