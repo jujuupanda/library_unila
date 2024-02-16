@@ -13,9 +13,9 @@ class UpdateUserClass {
     final response = await http
         .patch(url, body: {"addr": addr, "phone": phone, "email": email});
     if (response.statusCode == 200) {
-      print("update user repo ${response.body}");
+      print("patch success ${response.body}");
     } else {
-      print("update user repo ${response.body}");
+      print("patch failed ${response.body}");
     }
   }
 
@@ -26,13 +26,13 @@ class UpdateUserClass {
   ) async {
     errorMessageChangePassword = "";
     final url =
-        Uri.parse("${UrlRepository().url}/user/patchUser/$npm/password");
+        Uri.parse("${UrlRepository().url}/user/patchUser/$npm/passwordMd5");
     final response = await http.patch(url, body: {
       "oldPwd": oldPwd,
       "newPwd": newPwd,
     });
     if (response.statusCode == 200) {
-      print("update user repo ${response.body}");
+      print("patch password success ${response.body}");
     } else {
       final resultError = jsonDecode(response.body);
       if (resultError['message'] == "Invalid password") {

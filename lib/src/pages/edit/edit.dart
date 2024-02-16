@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -48,190 +49,221 @@ class _EditProfilePageState extends State<EditProfilePage> {
     phoneController = TextEditingController(text: userModel.phone);
     addressController = TextEditingController(text: userModel.addr);
     super.initState();
+
   }
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Update Berhasil'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Update berhasil dilakukan.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: ()  {
+                _userBloc = context.read<UserInfoBloc>();
+                _userBloc.add(UpdateUserInitialEvent());
+                context.goNamed(Routes.home);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UserInfoBloc, UserInfoState>(
-      listener: (context, state) {
-        if (state is UpdateUserInfoSuccessState) {
-          context.goNamed(Routes.home);
-        }
-      },
-      child: Scaffold(
-        body: BlocBuilder<UserInfoBloc, UserInfoState>(
-          builder: (context, state) {
-            if (state is UpdateUserInfoLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Column(
-              children: [
-                HeaderAllPage(
-                    headerName: "Edit Profile",
-                    function: () {
-                      context.pop();
-                    }),
-                Expanded(
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Form(
-                          key: _formState,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text("Nama", style: poppinsNormal3),
-                              TextFormField(
-                                controller: nameController,
-                                readOnly: true,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.person),
-                                ),
+    return Scaffold(
+      body: BlocBuilder<UserInfoBloc, UserInfoState>(
+        builder: (context, state) {
+          if (state is UpdateUserInfoLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is UpdateUserInfoSuccessState){
+            // SchedulerBinding.instance.addPostFrameCallback((_) {
+            //   _showMyDialog();
+            // });
+            WidgetsBinding.instance
+                .addPostFrameCallback((_) => _showMyDialog());
+          }
+
+          return Column(
+            children: [
+              HeaderAllPage(
+                  headerName: "Edit Profile",
+                  function: () {
+                    context.pop();
+                  }),
+              Expanded(
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Form(
+                        key: _formState,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Nama", style: poppinsNormal3),
+                            TextFormField(
+                              controller: nameController,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.person),
                               ),
-                              const SizedBox(height: 16),
-                              const Text("NPM", style: poppinsNormal3),
-                              TextFormField(
-                                controller: npmController,
-                                readOnly: true,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.credit_card_outlined),
-                                ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text("NPM", style: poppinsNormal3),
+                            TextFormField(
+                              controller: npmController,
+                              readOnly: true,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.credit_card_outlined),
                               ),
-                              const SizedBox(height: 16),
-                              const Text("Email", style: poppinsNormal3),
-                              TextFormField(
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: (value) => EmailValidator.validate(
-                                        emailController.text)
-                                    ? null
-                                    : "Masukkan email yang valid",
-                                inputFormatters: [RemoveEmojiInputFormatter()],
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.mail_rounded),
-                                ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text("Email", style: poppinsNormal3),
+                            TextFormField(
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) => EmailValidator.validate(
+                                      emailController.text)
+                                  ? null
+                                  : "Masukkan email yang valid",
+                              inputFormatters: [RemoveEmojiInputFormatter()],
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.mail_rounded),
                               ),
-                              const SizedBox(height: 16),
-                              const Text("No. Telepon", style: poppinsNormal3),
-                              TextFormField(
-                                controller: phoneController,
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(14),
-                                ],
-                                validator: (value) {
-                                  if (value == '') {
-                                    return 'No. Telepon tidak boleh kosong';
-                                  } else if (value!.length < 10) {
-                                    return 'No. Telepon harap diisi dengan benar';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.phone),
-                                ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text("No. Telepon", style: poppinsNormal3),
+                            TextFormField(
+                              controller: phoneController,
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(14),
+                              ],
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'No. Telepon tidak boleh kosong';
+                                } else if (value!.length < 10) {
+                                  return 'No. Telepon harap diisi dengan benar';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.phone),
                               ),
-                              const SizedBox(height: 16),
-                              const Text("Alamat", style: poppinsNormal3),
-                              TextFormField(
-                                controller: addressController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: null,
-                                validator: (value) {
-                                  if (value == '') {
-                                    return 'Alamat tidak boleh kosong';
-                                  } else if (value!.length <= 15) {
-                                    return 'Alamat harap diisi dengan lengkap';
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.location_on_rounded),
-                                ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text("Alamat", style: poppinsNormal3),
+                            TextFormField(
+                              controller: addressController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'Alamat tidak boleh kosong';
+                                } else if (value!.length <= 15) {
+                                  return 'Alamat harap diisi dengan lengkap';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.location_on_rounded),
                               ),
-                              const SizedBox(height: 20),
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Material(
-                                    child: InkWell(
-                                      onTap: () {
-                                        showSnackBar(context);
-                                        // context.pushNamed(Routes.changePassword,
-                                        //     extra: userModel);
-                                      },
-                                      child: const Text(
-                                        "Ganti Password",
-                                        style: TextStyle(
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: colorPrimary),
-                                      ),
-                                    ),
-                                  )),
-                              const SizedBox(height: 30),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
+                            ),
+                            const SizedBox(height: 20),
+                            Align(
+                                alignment: Alignment.centerRight,
                                 child: Material(
-                                  color: Colors.transparent,
                                   child: InkWell(
                                     onTap: () {
-                                      if (_formState.currentState!.validate()) {
-                                        patchUser();
-                                      }
+                                      // showSnackBar(context);
+                                      context.pushNamed(Routes.changePassword,
+                                          extra: userModel);
                                     },
-                                    splashColor: colorPrimary,
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: const Center(
-                                      child: Text(
-                                        "Submit",
-                                        style: TextStyle(
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                            color: Colors.white),
-                                      ),
+                                    child: const Text(
+                                      "Ganti Password",
+                                      style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: colorPrimary),
+                                    ),
+                                  ),
+                                )),
+                            const SizedBox(height: 30),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    if (_formState.currentState!.validate()) {
+                                      patchUser();
+                                    }
+                                  },
+                                  splashColor: colorPrimary,
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: const Center(
+                                    child: Text(
+                                      "Submit",
+                                      style: TextStyle(
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                          color: Colors.white),
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 20),
-                              const Text(
-                                cautionUpdate,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "Poppins",
-                                    fontSize: 10,
-                                    color: Colors.red),
-                              ),
-                              const SizedBox(height: 60),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 20),
+                            const Text(
+                              cautionUpdate,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "Poppins",
+                                  fontSize: 10,
+                                  color: Colors.red),
+                            ),
+                            const SizedBox(height: 60),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          },
-        ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
