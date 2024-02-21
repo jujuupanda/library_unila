@@ -14,3 +14,4 @@ const imageBackgroundOpac = "assets/images/background_opac.jpg";
 const imageHelp = "assets/images/help.png";
 const imageNoConn = "assets/images/no_connection.png";
 const imageWarnConn = "assets/images/warning_connection.png";
+const imageWeb = "assets/images/www.png";

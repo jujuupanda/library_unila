@@ -2,13 +2,16 @@ class BookModel {
   BookModel({
     this.titId,
     this.titKey,
-    this.eTitBib,});
+    this.eTitBib,
+  });
 
   BookModel.fromJson(dynamic json) {
     titId = json['TitId'];
     titKey = json['TitKey'];
-    eTitBib = json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
+    eTitBib =
+        json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
   }
+
   int? titId;
   String? titKey;
   ETitBib? eTitBib;
@@ -22,18 +25,19 @@ class BookModel {
     }
     return map;
   }
-
 }
 
 class ETitBib {
   ETitBib({
     this.tBBibId,
-    this.eBib,});
+    this.eBib,
+  });
 
   ETitBib.fromJson(dynamic json) {
     tBBibId = json['TBBibId'];
     eBib = json['EBib'] != null ? EBib.fromJson(json['EBib']) : null;
   }
+
   int? tBBibId;
   EBib? eBib;
 
@@ -45,7 +49,6 @@ class ETitBib {
     }
     return map;
   }
-
 }
 
 class EBib {
@@ -54,7 +57,8 @@ class EBib {
     this.calKey,
     this.ediRaw,
     this.pubRaw,
-    this.eIdn,});
+    this.eIdn,
+  });
 
   EBib.fromJson(dynamic json) {
     bibId = json['BibId'];
@@ -63,6 +67,7 @@ class EBib {
     pubRaw = json['PubRaw'];
     eIdn = json['EIdn'] != null ? EIdn.fromJson(json['EIdn']) : null;
   }
+
   int? bibId;
   String? calKey;
   String? ediRaw;
@@ -80,20 +85,21 @@ class EBib {
     }
     return map;
   }
-
 }
 
 class EIdn {
   EIdn({
     this.idnBibId,
     this.idnId,
-    this.idnKey,});
+    this.idnKey,
+  });
 
   EIdn.fromJson(dynamic json) {
     idnBibId = json['IdnBibId'];
     idnId = json['IdnId'];
     idnKey = json['IdnKey'];
   }
+
   int? idnBibId;
   int? idnId;
   String? idnKey;
@@ -105,5 +111,4 @@ class EIdn {
     map['IdnKey'] = idnKey;
     return map;
   }
-
 }

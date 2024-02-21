@@ -12,13 +12,20 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
 
   UserInfoBloc({required this.repository}) : super(UserInfoInitialState()) {
     on<UpdateUserInfoEvent>(_UpdateUserInfoEvent);
+    on<UpdateUserInitialEvent>(_UpdateUserInitial);
+  }
+
+  _UpdateUserInitial(
+      UpdateUserInitialEvent event, Emitter<UserInfoState> emit) {
+    emit(UserInfoInitialState());
   }
 
   _UpdateUserInfoEvent(
       UpdateUserInfoEvent event, Emitter<UserInfoState> emit) async {
     emit(UpdateUserInfoLoadingState());
     try {
-      await repository.updateUserClass.updateUser(event.npm, event.address, event.phone, event.email);
+      await repository.updateUserClass
+          .updateUser(event.npm, event.address, event.phone, event.email);
       emit(UpdateUserInfoSuccessState());
     } catch (error) {
       emit(UpdateUserInfoErrorState());

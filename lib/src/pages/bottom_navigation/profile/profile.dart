@@ -223,11 +223,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 style: poppinsNormal3),
                                             InkWell(
                                               onTap: () {
-                                                showSnackBar(context);
-                                                // context.pushNamed(
-                                                //   Routes.changePassword,
-                                                //   extra: state.userModel,
-                                                // );
+                                                // showSnackBar(context);
+                                                context.pushNamed(
+                                                  Routes.changePassword,
+                                                  extra: state.userModel,
+                                                );
                                               },
                                               child: const Icon(
                                                 Icons.arrow_forward_ios_rounded,

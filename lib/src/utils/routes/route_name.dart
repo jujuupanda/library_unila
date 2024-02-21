@@ -4,6 +4,7 @@ abstract class Routes {
   static const splash = "/";
   static const bottomNavigation = "bottomNavigation";
   static const signIn = "signIn";
+  static const webViewSSO = "webViewSSO";
   static const home = "home";
   static const opac = "opac";
   static const profile = "profile";

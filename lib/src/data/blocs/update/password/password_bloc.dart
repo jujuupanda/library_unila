@@ -28,8 +28,7 @@ class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
           .updatePassword(event.npm, event.oldPwd, event.newPwd);
       if (repository.updateUserClass.errorMessageChangePassword == "") {
         emit(PasswordSuccessState());
-      }
-      {
+      } else {
         emit(PasswordErrorState(
             repository.updateUserClass.errorMessageChangePassword));
       }

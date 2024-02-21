@@ -1,11 +1,12 @@
 class HistoryModel {
   HistoryModel({
-      this.id, 
-      this.itemNo, 
-      this.chkODate, 
-      this.dueDate, 
-      this.chkIDate, 
-      this.cItem,});
+    this.id,
+    this.itemNo,
+    this.chkODate,
+    this.dueDate,
+    this.chkIDate,
+    this.cItem,
+  });
 
   HistoryModel.fromJson(dynamic json) {
     id = json['ID'];
@@ -15,6 +16,7 @@ class HistoryModel {
     chkIDate = json['ChkIDate'];
     cItem = json['CItem'] != null ? CItem.fromJson(json['CItem']) : null;
   }
+
   String? id;
   String? itemNo;
   String? chkODate;
@@ -34,18 +36,18 @@ class HistoryModel {
     }
     return map;
   }
-
 }
 
 class CItem {
   CItem({
-      this.itemNo, 
-      this.itemBib, 
-      this.itemClss, 
-      this.locaCode, 
-      this.copyNo, 
-      this.eBib, 
-      this.eTitBib,});
+    this.itemNo,
+    this.itemBib,
+    this.itemClss,
+    this.locaCode,
+    this.copyNo,
+    this.eBib,
+    this.eTitBib,
+  });
 
   CItem.fromJson(dynamic json) {
     itemNo = json['ItemNo'];
@@ -54,8 +56,10 @@ class CItem {
     locaCode = json['LocaCode'];
     copyNo = json['CopyNo'];
     eBib = json['EBib'] != null ? EBib.fromJson(json['EBib']) : null;
-    eTitBib = json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
+    eTitBib =
+        json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
   }
+
   String? itemNo;
   int? itemBib;
   String? itemClss;
@@ -79,20 +83,21 @@ class CItem {
     }
     return map;
   }
-
 }
 
 class ETitBib {
   ETitBib({
-      this.tBBibId, 
-      this.tBTitId, 
-      this.eTit,});
+    this.tBBibId,
+    this.tBTitId,
+    this.eTit,
+  });
 
   ETitBib.fromJson(dynamic json) {
     tBBibId = json['TBBibId'];
     tBTitId = json['TBTitId'];
     eTit = json['ETit'] != null ? ETit.fromJson(json['ETit']) : null;
   }
+
   int? tBBibId;
   int? tBTitId;
   ETit? eTit;
@@ -106,18 +111,19 @@ class ETitBib {
     }
     return map;
   }
-
 }
 
 class ETit {
   ETit({
-      this.titId, 
-      this.titKey,});
+    this.titId,
+    this.titKey,
+  });
 
   ETit.fromJson(dynamic json) {
     titId = json['TitId'];
     titKey = json['TitKey'];
   }
+
   int? titId;
   String? titKey;
 
@@ -127,16 +133,16 @@ class ETit {
     map['TitKey'] = titKey;
     return map;
   }
-
 }
 
 class EBib {
   EBib({
-      this.bibId, 
-      this.calKey, 
-      this.ediRaw, 
-      this.pubRaw, 
-      this.eIdn,});
+    this.bibId,
+    this.calKey,
+    this.ediRaw,
+    this.pubRaw,
+    this.eIdn,
+  });
 
   EBib.fromJson(dynamic json) {
     bibId = json['BibId'];
@@ -145,6 +151,7 @@ class EBib {
     pubRaw = json['PubRaw'];
     eIdn = json['EIdn'] != null ? EIdn.fromJson(json['EIdn']) : null;
   }
+
   int? bibId;
   String? calKey;
   String? ediRaw;
@@ -162,20 +169,21 @@ class EBib {
     }
     return map;
   }
-
 }
 
 class EIdn {
   EIdn({
-      this.idnBibId, 
-      this.idnId, 
-      this.idnKey,});
+    this.idnBibId,
+    this.idnId,
+    this.idnKey,
+  });
 
   EIdn.fromJson(dynamic json) {
     idnBibId = json['IdnBibId'];
     idnId = json['IdnId'];
     idnKey = json['IdnKey'];
   }
+
   int? idnBibId;
   int? idnId;
   String? idnKey;
@@ -187,5 +195,4 @@ class EIdn {
     map['IdnKey'] = idnKey;
     return map;
   }
-
 }

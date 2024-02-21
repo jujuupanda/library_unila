@@ -5,6 +5,7 @@ import 'package:library_unila/src/data/blocs/auth/auth_bloc.dart';
 import 'package:library_unila/src/pages/sign_in/sign_in_header.dart';
 import 'package:library_unila/src/utils/constants/constant.dart';
 import 'package:library_unila/src/utils/routes/app_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -15,9 +16,13 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formState = GlobalKey<FormState>();
+
   bool _obscureText = true;
   TextEditingController npmController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  final Uri _urlAkses = Uri.parse('https://akses.unila.ac.id/api/live/v1/auth/login/sso?app_key=T0aoId2UIUXAbrb0gA1PiohIkYVaPobjCUMgQanxH3w=');
+
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -29,86 +34,86 @@ class _SignInPageState extends State<SignInPage> {
     context.read<AuthBloc>().add(OnSignInEvent(
         npmController.text.toString(), passwordController.text.toString()));
   }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: SizedBox(
-          height: 100,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 45,
-                  width: 45,
-                  child: Image.asset(
-                    'assets/images/exit.png',
-                  ),
-                ),
-              ),
-              const Text(
-                'Apakah kamu yakin ingin keluar?',
-                style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
-              )
-            ],
-          ),
-        ),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop(false);
-                },
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  height: 40,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border:
-                      Border.all(width: 1, color: colorPrimary)),
-                  child: const Center(
-                    child: Text(
-                      'Tidak',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: colorPrimary,
-                          fontWeight: FontWeight.w600),
+          context: context,
+          builder: (context) => AlertDialog(
+            content: SizedBox(
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 45,
+                      width: 45,
+                      child: Image.asset(
+                        'assets/images/exit.png',
+                      ),
                     ),
                   ),
-                ),
+                  const Text(
+                    'Apakah kamu yakin ingin keluar?',
+                    style: TextStyle(fontFamily: 'Poppins', fontSize: 13),
+                  )
+                ],
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop(true);
-                },
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  height: 40,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: colorPrimary),
-                  child: const Center(
-                    child: Text(
-                      'Keluar',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(width: 1, color: colorPrimary)),
+                      child: const Center(
+                        child: Text(
+                          'Tidak',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: colorPrimary,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      height: 40,
+                      width: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: colorPrimary),
+                      child: const Center(
+                        child: Text(
+                          'Keluar',
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 10),
             ],
           ),
-          const SizedBox(height: 10),
-        ],
-      ),
-    )) ??
+        )) ??
         false;
   }
 
@@ -159,7 +164,8 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           TextFormField(
                             controller: npmController,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
@@ -187,7 +193,8 @@ class _SignInPageState extends State<SignInPage> {
                           ),
                           TextFormField(
                             controller: passwordController,
-                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             textInputAction: TextInputAction.done,
                             obscureText: _obscureText,
                             validator: (value) {
@@ -210,7 +217,7 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 16),
                           BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, state) {
                               if (state is AuthLoadingState) {
@@ -233,7 +240,7 @@ class _SignInPageState extends State<SignInPage> {
                               return const SizedBox();
                             },
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 16),
                           Container(
                             width: MediaQuery.of(context).size.width,
                             height: 40,
@@ -263,7 +270,70 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                               ),
                             ),
-                          )
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15),
+                                border:
+                                    Border.all(width: 1, color: Colors.blue)),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  context.pushNamed(Routes.webViewSSO);
+                                },
+                                splashColor: colorPrimary,
+                                borderRadius: BorderRadius.circular(15),
+                                child: const Center(
+                                  child: Text(
+                                    "Login SSO Unila",
+                                    style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Colors.blue),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // const SizedBox(height: 10),
+                          // Container(
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 40,
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.white,
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       border:
+                          //       Border.all(width: 1, color: Colors.blue)),
+                          //   child: Material(
+                          //     color: Colors.transparent,
+                          //     child: InkWell(
+                          //       onTap: () async {
+                          //         if (!await launchUrl(_urlAkses)) {
+                          //           throw Exception(
+                          //               'Could not launch $_urlAkses');
+                          //         }
+                          //       },
+                          //       splashColor: colorPrimary,
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       child: const Center(
+                          //         child: Text(
+                          //           "Login SSO Unila",
+                          //           style: TextStyle(
+                          //               fontFamily: "Poppins",
+                          //               fontWeight: FontWeight.w500,
+                          //               fontSize: 16,
+                          //               color: Colors.blue),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),

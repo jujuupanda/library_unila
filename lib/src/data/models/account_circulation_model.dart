@@ -6,7 +6,8 @@ class AccountCirculationModel {
     this.fineAmnt,
     this.paidAmnt,
     this.paidDate,
-    this.cItem,});
+    this.cItem,
+  });
 
   AccountCirculationModel.fromJson(dynamic json) {
     id = json['ID'];
@@ -17,6 +18,7 @@ class AccountCirculationModel {
     paidDate = json['PaidDate'];
     cItem = json['CItem'] != null ? CItem.fromJson(json['CItem']) : null;
   }
+
   String? id;
   String? itemNo;
   String? chkODate;
@@ -38,7 +40,6 @@ class AccountCirculationModel {
     }
     return map;
   }
-
 }
 
 class CItem {
@@ -49,7 +50,8 @@ class CItem {
     this.locaCode,
     this.copyNo,
     this.eBib,
-    this.eTitBib,});
+    this.eTitBib,
+  });
 
   CItem.fromJson(dynamic json) {
     itemNo = json['ItemNo'];
@@ -58,8 +60,10 @@ class CItem {
     locaCode = json['LocaCode'];
     copyNo = json['CopyNo'];
     eBib = json['EBib'] != null ? EBib.fromJson(json['EBib']) : null;
-    eTitBib = json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
+    eTitBib =
+        json['ETitBib'] != null ? ETitBib.fromJson(json['ETitBib']) : null;
   }
+
   String? itemNo;
   int? itemBib;
   String? itemClss;
@@ -83,20 +87,21 @@ class CItem {
     }
     return map;
   }
-
 }
 
 class ETitBib {
   ETitBib({
     this.tBBibId,
     this.tBTitId,
-    this.eTit,});
+    this.eTit,
+  });
 
   ETitBib.fromJson(dynamic json) {
     tBBibId = json['TBBibId'];
     tBTitId = json['TBTitId'];
     eTit = json['ETit'] != null ? ETit.fromJson(json['ETit']) : null;
   }
+
   int? tBBibId;
   int? tBTitId;
   ETit? eTit;
@@ -110,18 +115,19 @@ class ETitBib {
     }
     return map;
   }
-
 }
 
 class ETit {
   ETit({
     this.titId,
-    this.titKey,});
+    this.titKey,
+  });
 
   ETit.fromJson(dynamic json) {
     titId = json['TitId'];
     titKey = json['TitKey'];
   }
+
   int? titId;
   String? titKey;
 
@@ -131,7 +137,6 @@ class ETit {
     map['TitKey'] = titKey;
     return map;
   }
-
 }
 
 class EBib {
@@ -139,7 +144,8 @@ class EBib {
     this.bibId,
     this.calKey,
     this.ediRaw,
-    this.pubRaw,});
+    this.pubRaw,
+  });
 
   EBib.fromJson(dynamic json) {
     bibId = json['BibId'];
@@ -147,6 +153,7 @@ class EBib {
     ediRaw = json['EdiRaw'];
     pubRaw = json['PubRaw'];
   }
+
   int? bibId;
   String? calKey;
   String? ediRaw;
@@ -160,5 +167,4 @@ class EBib {
     map['PubRaw'] = pubRaw;
     return map;
   }
-
 }
