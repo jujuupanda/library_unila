@@ -272,35 +272,35 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(15),
-                                border:
-                                    Border.all(width: 1, color: Colors.blue)),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () {
-                                  context.pushNamed(Routes.webViewSSO);
-                                },
-                                splashColor: colorPrimary,
-                                borderRadius: BorderRadius.circular(15),
-                                child: const Center(
-                                  child: Text(
-                                    "Login SSO Unila",
-                                    style: TextStyle(
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        color: Colors.blue),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   width: MediaQuery.of(context).size.width,
+                          //   height: 40,
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.white,
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       border:
+                          //           Border.all(width: 1, color: Colors.blue)),
+                          //   child: Material(
+                          //     color: Colors.transparent,
+                          //     child: InkWell(
+                          //       onTap: () {
+                          //         context.pushNamed(Routes.webViewSSO);
+                          //       },
+                          //       splashColor: colorPrimary,
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       child: const Center(
+                          //         child: Text(
+                          //           "Login SSO Unila",
+                          //           style: TextStyle(
+                          //               fontFamily: "Poppins",
+                          //               fontWeight: FontWeight.w500,
+                          //               fontSize: 16,
+                          //               color: Colors.blue),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           // const SizedBox(height: 10),
                           // Container(
                           //   width: MediaQuery.of(context).size.width,
