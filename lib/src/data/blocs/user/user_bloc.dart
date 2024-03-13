@@ -20,7 +20,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   _getUserEvent(GetUserEvent event, Emitter<UserState> emit) async {
     emit(UserLoadingState());
     try {
-      final user = await repository.getUserClass.getUserSSO(event.token);
+      final user = await repository.getUserClass.getUser(event.token);
       emit(GetUserSuccessState(user));
     } catch (e) {
       emit(GetUserErrorState());
